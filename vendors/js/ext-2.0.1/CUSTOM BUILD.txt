@@ -1,0 +1,28 @@
+CUSTOM BUILD INSTRUCTIONS (2008/02/04)
+-------------------------
+
+For the tutorial I generated a custom build of Ext JS. These are the options I chose.
+I also removed images and css selectors that were not relevant to this example to keep the filesize down.
+
+
+
+http://extjs.com/download/build
+
+Page 1
+
+	No Adapter (Ext Stand-alone)
+
+
+Page 2
+
+	Ext Core
+	Core - Components
+	Core - Drag and Drop
+					- Overflow Scrolling Support
+	Data - Core
+	Data - JSON Support
+	Tree - Core
+					- Sorting Support
+					- Filtering Support
+					- Drag and Drop Support
+	Tree - Ajax Loading Support

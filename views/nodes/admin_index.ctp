@@ -1,22 +1,13 @@
 <div class="nodes index">
-<h2><?php __('Nodes');?></h2>
-<p>
-<?php
-echo $paginator->counter(array(
-'format' => __('Page %page% of %pages%, showing %current% records out of %count% total, starting on record %start%, ending on %end%', true)
-));
-?></p>
+<h2><?php __('Content');?></h2>
 <table cellpadding="0" cellspacing="0">
 <tr>
-	<th><?php echo $paginator->sort('id');?></th>
-	<th><?php echo $paginator->sort('parent_id');?></th>
-	<th><?php echo $paginator->sort('title');?></th>
-	<th><?php echo $paginator->sort('lft');?></th>
-	<th><?php echo $paginator->sort('rght');?></th>
-	<th><?php echo $paginator->sort('slug');?></th>
-	<th><?php echo $paginator->sort('type');?></th>
-	<th><?php echo $paginator->sort('created');?></th>
-	<th><?php echo $paginator->sort('modified');?></th>
+	<th>#</th>
+	<th>Parent</th>
+	<th>Title</th>
+	<th>Type</th>
+	<th>Url</th>
+	<th>Modified</th>
 	<th class="actions"><?php __('Actions');?></th>
 </tr>
 <?php
@@ -27,7 +18,7 @@ foreach ($nodes as $node):
 		$class = ' class="altrow"';
 	}
 ?>
-	<tr<?php echo $class;?>>
+	<tr<?php echo $class;?> id="<?php echo $node['Node']['id']; ?>">
 		<td>
 			<?php echo $node['Node']['id']; ?>
 		</td>
@@ -38,19 +29,10 @@ foreach ($nodes as $node):
 			<?php echo $node['Node']['title']; ?>
 		</td>
 		<td>
-			<?php echo $node['Node']['lft']; ?>
-		</td>
-		<td>
-			<?php echo $node['Node']['rght']; ?>
-		</td>
-		<td>
-			<?php echo $node['Node']['slug']; ?>
-		</td>
-		<td>
 			<?php echo $node['Node']['type']; ?>
 		</td>
 		<td>
-			<?php echo $node['Node']['created']; ?>
+			<?php echo $node['Node']['url']; ?>
 		</td>
 		<td>
 			<?php echo $node['Node']['modified']; ?>
@@ -63,11 +45,6 @@ foreach ($nodes as $node):
 	</tr>
 <?php endforeach; ?>
 </table>
-</div>
-<div class="paging">
-	<?php echo $paginator->prev('<< '.__('previous', true), array(), null, array('class'=>'disabled'));?>
- | 	<?php echo $paginator->numbers();?>
-	<?php echo $paginator->next(__('next', true).' >>', array(), null, array('class'=>'disabled'));?>
 </div>
 <div class="actions">
 	<ul>

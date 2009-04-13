@@ -1,7 +1,7 @@
 <?php
-	$html->css('/bakedsimple/css/jquery.ui.tabs', 'stylesheet', null, false);
-	$javascript->link('/bakedsimple/js/jquery.ui.core', false);
-	$javascript->link('/bakedsimple/js/jquery.ui.tabs', false);
+	$html->css('/baked_simple/css/jquery.ui.tabs', 'stylesheet', null, false);
+	$javascript->link('/baked_simple/js/jquery.ui.core', false);
+	$javascript->link('/baked_simple/js/jquery.ui.tabs', false);
 	
 	echo $javascript->codeBlock('
 		$(function() {
@@ -34,7 +34,7 @@
 					echo $eav->inputs($attributes);
 				?>
 			</div>
-			<div class="buttonHolder">
+			<div class="ctrlHolder buttonHolder">
 				<?php echo $html->link(__('<< List Nodes', true), array('action'=>'index'), array('class' => 'resetButton'));?>
 				<?php echo $uniform->submit('Save & List Nodes', array('div' => false, 'name' => 'saveList')); ?>
 				<?php echo $uniform->submit('Save & Continue', array('div' => false, 'class' => 'primaryAction', 'name' => 'saveEdit')); ?>

@@ -6,10 +6,9 @@ class UniformHelper extends FormHelper {
 	var $helpers = array('Html', 'Javascript');
 	
 	function create($model = null, $options = array()) {
-		
 		// include required files.
-		$this->Javascript->link('/bakedsimple/js/uni-form.jquery', false);
-		$this->Html->css('/bakedsimple/css/uni-form.css', 'stylesheet', null, false);
+		$this->Javascript->link('/baked_simple/js/uni-form.jquery', false);
+		$this->Html->css('/baked_simple/css/uni-form.css', 'stylesheet', null, false);
 		
 		// put in the uniForm class
 		if ( !isset($options['class']) ) {
@@ -128,7 +127,7 @@ class UniformHelper extends FormHelper {
 	
 	function submit($caption = null, $options = array()) {
 		if ( !isset($options['div']) ) {
-			$options['div'] = 'buttonHolder';
+			$options['div'] = 'ctrlHolder buttonHolder';
 		}
 		return parent::submit($caption, $options);
 	}

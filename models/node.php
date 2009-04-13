@@ -4,65 +4,19 @@ class Node extends AppModel {
 	var $name = 'Node';
 	var $validate = array(
 		'title' => array('notempty'),
-		'slug' => array('alphanumeric'),
 		'type' => array('notempty')
 	);
 	var $actsAs = array(
 		'Tree',
-		'Bakedsimple.Sluggable',
+		'Sluggable' => array(
+			'overwrite' => true
+		),
 		'Eav.Eav' => array(
 			'alias' => 'eavModel'
-		)
+		),
+		'Containable'
 	);
 	
-	var $templateFields = array();
-
-	function syncEavAttributes()
-	{
-		if ( empty($this->data['Node']['template']) ) {
-			$template = $this->field('template');
-		}
-		else {
-			$template = $this->data['Node']['template'];
-		}
-		$path = VIEWS . $template;
-		
-		// include the file, which will be calling field() methods. Since it is being
-		// called within this class, then we can automatically create attributes in the 
-		// eav system (if not already there). 
-		ob_start();
-		include($path);
-		ob_end_clean();
-		
-		// bind our model to the attributes table so we can query it.
-		$this->bindModel(array('hasMany' => array('EavAttribute')));
-		
-		// get what the alias would be based on the template.
-		$eavModel = $this->eavModel($template);
-		
-		// go through each field called and setup page attributes.
-		foreach ($this->templateFields as $attribute) 
-		{
-			// reset so we don't update previously found attributes.
-			$this->EavAttribute->create();
-			
-			// check if one exists.
-			$conditions = array(
-				'name' => $attribute['name'],
-				'model' => $eavModel
-			);
-			$eav_attribute = $this->EavAttribute->find('first', compact('conditions'));
-			if ( $eav_attribute ) {
-				$this->EavAttribute->id = $eav_attribute['EavAttribute']['id']; // cause an update
-			}
-			
-			// save or update, yay!
-			$attribute['model'] = $eavModel;
-			$this->EavAttribute->save($attribute);
-		}
-		
-		return $this->templateFields;
-	}
 	
 	function eavModel($template = null) {
 		if ( empty($template) ) {
@@ -76,6 +30,11 @@ class Node extends AppModel {
 	
 	function content($name, $type, $options)
 	{
+		$reserved = array_keys($this->schema());
+		if ( in_array($name, $reserved) ) {
+			$this->templateErrors[] = $name . ' is a reserved content key. Please choose another';
+			return;
+		}
 		$this->templateFields[] = array(
 			'name' => $name,
 			'type' => $type,
@@ -89,19 +48,47 @@ class Node extends AppModel {
 	* @param mixed $column
 	*/
 	function getColumnType($column) {
+		if ( parent::schema(array_pop(explode('.', $column))) ) {
+			return parent::getColumnType($column);
+		}
 		$eavType = $this->Behaviors->dispatchMethod($this, 'getColumnType', array($column));
 		if ( !$eavType || $eavType === array('unhandled') ) {
 			$eavType = parent::getColumnType($column);
 		}
 		return $eavType;
 	}
-	
 	function schema($field = false) {
 		$eavSchema = $this->Behaviors->dispatchMethod($this, 'schema', array($field));
 		if ( !$eavSchema || $eavSchema === array('unhandled') ) {
 			$eavSchema = parent::schema($field);
 		}
 		return $eavSchema;
+	}
+	function parentSchema($field = false) {
+		return parent::schema($field);
+	}
+	
+	// Caches a URL.
+	function afterSave() {
+		$this->saveField('url', $this->url(), array('validate' => false, 'callbacks' => false));
+		
+		// get all the children as they will be affected.
+		$children = $this->children($this->id);
+		foreach ($children as $child) {
+			$this->id = $child['Node']['id'];
+			$this->saveField('url', $this->url(), array('validate' => false, 'callbacks' => false));
+		}
+	}
+	
+	function url() {
+		$path = $this->getPath($this->id);
+		$paths = Set::extract('/Node/slug', $path);
+		$me = array_pop($path);
+		if ( $me['Node']['default'] ) {
+			array_pop($paths);
+		}
+		$url = '/' . join('/', $paths);
+		return $url;
 	}
 }
 ?>

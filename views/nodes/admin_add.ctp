@@ -15,7 +15,7 @@
  			<?php echo $this->element('admin' . DS . 'nodes' . DS . 'form'); ?>
 		</fieldset>
 	</div>
-	<div class="buttonHolder">
+	<div class="ctrlHolder buttonHolder">
 		<?php echo $html->link(__('<< List Nodes', true), array('action'=>'index'), array('class' => 'resetButton'));?>
 		<?php echo $uniform->submit('Save & List Nodes', array('div' => false, 'name' => 'saveList')); ?>
 		<?php echo $uniform->submit('Save & Continue', array('div' => false, 'class' => 'primaryAction', 'name' => 'saveEdit')); ?>
