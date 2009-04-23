@@ -1,11 +1,13 @@
 <div class="nodes index">
 <h2><?php __('Content');?></h2>
+<?php $session->flash(); ?>
 <table cellpadding="0" cellspacing="0">
 <tr>
 	<th>#</th>
 	<th>Parent</th>
 	<th>Title</th>
 	<th>Type</th>
+	<th>Template</th>
 	<th>Url</th>
 	<th>Modified</th>
 	<th class="actions"><?php __('Actions');?></th>
@@ -30,6 +32,9 @@ foreach ($nodes as $node):
 		</td>
 		<td>
 			<?php echo $node['Node']['type']; ?>
+		</td>
+		<td>
+			<?php echo $node['Node']['template']; ?>
 		</td>
 		<td>
 			<?php echo $node['Node']['url']; ?>

@@ -2,28 +2,31 @@
 App::import('Helper', 'Form');
 
 class UniformHelper extends FormHelper {
-	
+
 	var $helpers = array('Html', 'Javascript');
-	
+
 	function create($model = null, $options = array()) {
 		// include required files.
 		$this->Javascript->link('/baked_simple/js/uni-form.jquery', false);
 		$this->Html->css('/baked_simple/css/uni-form.css', 'stylesheet', null, false);
-		
+
 		// put in the uniForm class
 		if ( !isset($options['class']) ) {
 			$options['class'] = 'uniForm';
 		}
+		if ( !isset($options['type']) ) {
+			$options['type'] = 'file';
+		}
 		return parent::create($model, $options);
 	}
 
-	function input($fieldName, $options = array()) 
+	function input($fieldName, $options = array())
 	{
 		$view =& ClassRegistry::getObject('view');
 		$this->setEntity($fieldName);
 		$model =& ClassRegistry::getObject($this->model());
 		$type = $model->getColumnType($this->field());
-		
+
 		if ( 'boolean' == $type ) {
 			if ( !isset($options['div']) ) {
 				$options['div'] = 'inlineLabel';
@@ -46,17 +49,20 @@ class UniformHelper extends FormHelper {
 				$options['after'] = '</div>' . $options['after'];
 			}
 		}
-		
+		else if ( 'file' == $type ) {
+			$options['type'] = 'file';
+		}
+
 		if ( !isset($options['div']) ) {
 			$options['div'] = 'ctrlHolder';
 		}
 		else {
 			$options['div'] = 'ctrlHolder ' . $options['div'];
 		}
-		
+
 		return parent::input($fieldName, $options);
 	}
-	
+
 	function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $selected = null, $attributes = array(), $showEmpty = true) {
 		if ( !isset($attributes['separator']) ) {
 			$attributes['separator'] = null;
@@ -117,31 +123,31 @@ class UniformHelper extends FormHelper {
 		$out .= '</label>';
 		return $out;
 	}
-	
+
 	function text($fieldName, $options = array()) {
 		if ( !isset($options['class']) ) {
 			$options['class'] = 'textInput';
 		}
 		return parent::text($fieldName, $options);
 	}
-	
+
 	function submit($caption = null, $options = array()) {
 		if ( !isset($options['div']) ) {
 			$options['div'] = 'ctrlHolder buttonHolder';
 		}
 		return parent::submit($caption, $options);
 	}
-	
+
 	function select($fieldName, $options = array(), $selected = null, $attributes = array(), $showEmpty = '') {
 		if ( !isset($attributes['escape']) ) {
 			$attributes['escape'] = false;
 		}
 		return parent::select($fieldName, $options, $selected, $attributes, $showEmpty);
 	}
-	
+
 	function checkbox($fieldName, $options = array()) {
 		if ( !isset($options['labelClass']) ) {
-			
+
 		}
 		return parent::checkbox($fieldName, $options);
 	}

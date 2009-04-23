@@ -16,18 +16,25 @@ class Node extends AppModel {
 		),
 		'Containable'
 	);
-	
-	
-	function eavModel($template = null) {
+
+
+	function eavModel($template = null, $layout = null) {
 		if ( empty($template) ) {
 			$template = $this->quietField('template');
 		}
-		$alias = substr($template, 0, strrpos($template, '.'));
+		if ( empty($layout) ) {
+			$layout = $this->quietField('layout');
+		}
+		$alias = $layout . '/' . $template;
+		$dotPos = strrpos($alias, '.');
+		if ( $dotPos !== false ) {
+			$alias = substr($template, 0, $dotPos);
+		}
 		$alias = ucwords(str_replace(array('/', '\\'), ' ', $alias));
 		$alias = str_replace(' ', '', $alias);
 		return $this->alias . $alias;
 	}
-	
+
 	function content($name, $type, $options)
 	{
 		$reserved = array_keys($this->schema());
@@ -41,10 +48,10 @@ class Node extends AppModel {
 			'options' => $options
 		);
 	}
-	
+
 	/**
 	* Transfers rights to the EAV behavior
-	* 
+	*
 	* @param mixed $column
 	*/
 	function getColumnType($column) {
@@ -67,19 +74,23 @@ class Node extends AppModel {
 	function parentSchema($field = false) {
 		return parent::schema($field);
 	}
-	
+
 	// Caches a URL.
 	function afterSave() {
-		$this->saveField('url', $this->url(), array('validate' => false, 'callbacks' => false));
-		
+		if ( 'Url' != $this->data['Node']['type'] ) {
+			$this->saveField('url', $this->url(), array('validate' => false, 'callbacks' => false));
+		}
+
 		// get all the children as they will be affected.
+		$id = $this->id;
 		$children = $this->children($this->id);
 		foreach ($children as $child) {
 			$this->id = $child['Node']['id'];
 			$this->saveField('url', $this->url(), array('validate' => false, 'callbacks' => false));
 		}
+		$this->id = $id;
 	}
-	
+
 	function url() {
 		$path = $this->getPath($this->id);
 		$paths = Set::extract('/Node/slug', $path);
