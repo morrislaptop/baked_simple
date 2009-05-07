@@ -2,7 +2,7 @@
 	$html->css('/baked_simple/css/jquery.ui.tabs', 'stylesheet', null, false);
 	$javascript->link('/baked_simple/js/jquery.ui.core', false);
 	$javascript->link('/baked_simple/js/jquery.ui.tabs', false);
-	
+
 	echo $javascript->codeBlock('
 		$(function() {
 			$("#tabs").tabs();
@@ -19,13 +19,13 @@
 					    'Content' => '#pagecontent',
 						'View' => array('action' => 'view', $this->data['Node']['id']),
 					    'All Content' => array('action' => 'index'),
-					), 
+					),
 				    array('id' => 'sub-nav')
-			    ); 
+			    );
 			?>
 			<div id="setup">
 				<fieldset class="blockLabels">
- 					<legend><?php __('Edit Node');?></legend>
+ 					<legend><?php __('Edit Content');?></legend>
 					<?php echo $this->element('admin' . DS . 'nodes' . DS . 'form'); ?>
 				</fieldset>
 			</div>
@@ -35,8 +35,8 @@
 				?>
 			</div>
 			<div class="ctrlHolder buttonHolder">
-				<?php echo $html->link(__('<< List Nodes', true), array('action'=>'index'), array('class' => 'resetButton'));?>
-				<?php echo $uniform->submit('Save & List Nodes', array('div' => false, 'name' => 'saveList')); ?>
+				<?php echo $html->link(__('<< List Content', true), array('action'=>'index'), array('class' => 'resetButton'));?>
+				<?php echo $uniform->submit('Save & List Content', array('div' => false, 'name' => 'saveList')); ?>
 				<?php echo $uniform->submit('Save & Continue', array('div' => false, 'class' => 'primaryAction', 'name' => 'saveEdit')); ?>
 			</div>
 		</div>

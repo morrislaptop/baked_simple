@@ -1,10 +1,10 @@
 <?php
-class BakedSimpleAppController extends AppController 
+class BakedSimpleAppController extends AppController
 {
-	var $helpers = array('Html', 'Form', 'Javascript', 'Uniform');
+	var $helpers = array('Html', 'Form', 'Javascript', 'Uniform.Uniform');
 	var $components = array('Auth');
-	
-	function admin_save_order($id = null) 
+
+	function admin_save_order($id = null)
 	{
     	if ( !$id ) {
 			die('changed row missing');
@@ -18,7 +18,7 @@ class BakedSimpleAppController extends AppController
     	if ( !is_numeric($this->data[$this->modelClass]['ordering']) ) {
     		die('ordering isnt numberic');
     	}
-    	
+
     	die(json_encode($this->{$this->modelClass}->save($this->data, true, array('ordering'))));
 	}
 }

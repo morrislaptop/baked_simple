@@ -1,5 +1,5 @@
 <div class="nodes index">
-<h2><?php __('Content');?></h2>
+<h2><?php __('Content');?> <small><?php echo $html->link(__('Create Content', true), array('action'=>'add')); ?></small></h2>
 <?php $session->flash(); ?>
 <table cellpadding="0" cellspacing="0">
 <tr>
@@ -51,8 +51,16 @@ foreach ($nodes as $node):
 <?php endforeach; ?>
 </table>
 </div>
-<div class="actions">
-	<ul>
-		<li><?php echo $html->link(__('New Node', true), array('action'=>'add')); ?></li>
-	</ul>
+<div class="paging">
+	<?php echo $paginator->prev('<< '.__('previous', true), array(), null, array('class'=>'disabled'));?>
+ | 	<?php echo $paginator->numbers();?>
+	<?php echo $paginator->next(__('next', true).' >>', array(), null, array('class'=>'disabled'));?>
 </div>
+<?php
+	echo $javascript->codeBlock('
+		$(".paging a").click(function() {
+			$("#content").load(this.href);
+			return false;
+		});
+	');
+?>

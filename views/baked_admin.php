@@ -4,18 +4,14 @@ class BakedAdminView extends View {
 	function content($name, $type = null, $options = null) {
 		$this->templateFields[] = compact('name', 'type', 'options');
 	}
-	function image($name, $options = null) {
-		$this->content($name, 'image', $options);
-	}
-	function textarea($name, $options = null) {
-		$this->content($name, 'textarea', $options);
-	}
-	function wysiwyg($name, $options = null) {
-		$this->content($name, 'wysiwyg', $options);
+
+	function __call($name, $args) {
+		$this->content($args[0], $name, empty($args[1]) ? array() : $args[1]);
 	}
 
-	function shared() {
-		
+	function shared() { }
+	function check() {
+		return true; // always returns true so all possible content fields get called
 	}
 }
 ?>

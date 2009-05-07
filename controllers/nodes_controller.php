@@ -3,7 +3,9 @@ class NodesController extends BakedSimpleAppController {
 
 	var $name = 'Nodes';
 	var $layout = 'app';
-	var $helpers = array('Html', 'Form', 'Eav.Eav', 'BakedSimple.Tree', 'BakedSimple.Firecake');
+	var $helpers = array('Eav.Eav', 'BakedSimple.Tree', 'BakedSimple.Firecake');
+	var $uses = array('BakedSimple.Node', 'BakedSimple.Shared');
+	var $components = array('BakedSimple.BakedSimple');
 
 	/**
 	* @var Node
@@ -12,7 +14,7 @@ class NodesController extends BakedSimpleAppController {
 
 	function admin_index() {
 		$this->Node->recursive = 0;
-		$this->Node->order = 'lft';
+		$this->Node->order = 'Node.lft';
 		$this->set('nodes', $this->paginate());
 	}
 
@@ -46,14 +48,18 @@ class NodesController extends BakedSimpleAppController {
 			$this->redirect(array('action'=>'index'));
 		}
 		if (!empty($this->data)) {
-			if ($this->Node->save($this->data)) {
+			$this->Node->id = $id;
+			$save = $this->Node->save($this->data);
+			if ( $save ) {
 				$this->_saveRedirect();
 			} else {
 				$this->Session->setFlash(__('The page could not be saved. Please, try again.', true), 'default', array('class' => 'errorMsg'));
 			}
 		}
 		if (empty($this->data)) {
-			$this->data = $this->Node->find('first', array('eav' => true));
+			$conditions = array('Node.id' => $id);
+			$eav = true;
+			$this->data = $this->Node->find('first', compact('conditions', 'eav'));
 		}
 		if (empty($this->data['Node']['id']) ) {
 			$this->data['Node']['id'] = $id;
@@ -117,6 +123,11 @@ class NodesController extends BakedSimpleAppController {
 				$this->Node->EavAttribute->id = $eav_attribute['EavAttribute']['id']; // cause an update
 			}
 
+			// convert options to php serialize string so we can use it later
+			if ( isset($attribute['options']) ) {
+				$attribute['options'] = serialize($attribute['options']);
+			}
+
 			// save or update, yay!
 			$attribute['model'] = $eavModel;
 			$this->Node->EavAttribute->save($attribute);
@@ -134,8 +145,9 @@ class NodesController extends BakedSimpleAppController {
 			$viewClass = $viewClass . 'View';
 			App::import('View', 'BakedSimple.BakedAdmin');
 		}
-		$View = new $viewClass($this, false);
+		$View = new $viewClass($this, true);
 		$View->render($template, $layout);
+		ClassRegistry::removeObject('view');
 		return $View->templateFields;
 	}
 
@@ -165,7 +177,7 @@ class NodesController extends BakedSimpleAppController {
 		$parents = $this->Node->generatetreelist(null, null, null, ' &nbsp; &nbsp; &nbsp; ');
 		unset($parents[$this->Node->id]);
 
-		$types = array('Page', 'Container', 'Url');
+		$types = array('Page', 'Container', 'Url', 'Menu');
 		$types = array_combine($types, $types);
 
 		$templates = $this->_getTemplates();
@@ -214,25 +226,6 @@ class NodesController extends BakedSimpleAppController {
 			$templates[$path] = Inflector::humanize($file->name());
 		}
 		return $templates;
-	}
-
-	function display() {
-		// get page
-		$path = func_get_args();
-		$url = '/' . join('/', $path);
-		$conditions = array('url' => $url);
-		$eav = true;
-		$node = $this->Node->find('first', compact('conditions', 'eav'));
-		$template = '/' . str_replace('.ctp', '', $node['Node']['template']);
-
-		// get menu
-		$contain = array();
-		$order = 'lft ASC';
-		$nodes  = $this->Node->find('threaded', compact('contain', 'order'));
-
-		// run
-		$this->set(compact('nodes', 'node'));
-		$this->render($template);
 	}
 
 	function admin_nodes()
@@ -294,6 +287,18 @@ class NodesController extends BakedSimpleAppController {
 
 	    // send success response
 	    exit('1');
+	}
+
+	function display() {
+		// use internal component to get data
+		$template_layout = $this->BakedSimple->pull($this);
+
+		// auto render the template
+		$this->render($template_layout['template'], $template_layout['layout']);
+	}
+
+	function sitemap() {
+		$this->BakedSimple->pull($this);
 	}
 }
 ?>

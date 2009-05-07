@@ -1,4 +1,4 @@
-<?php 
+<?php
 /* SVN FILE: $Id: tree.php 205 2008-08-13 14:13:32Z ad7six $ */
 /**
  * Tree Helper.
@@ -113,7 +113,9 @@ class TreeHelper extends AppHelper {
 				'id' => false,
 				'class' => false,
 				'element' => false,
+				'plugin' => false,
 				'callback' => false,
+				'maxDepth' => null,
 				'autoPath' => false,
 				'left' => 'lft',
 				'right' => 'rght',
@@ -151,6 +153,9 @@ class TreeHelper extends AppHelper {
 			$return = "\r\n";
 		}
 		$__addType = true;
+		$keys = array_keys($data);
+		$firstKey = array_shift($keys);
+		$lastKey = array_pop($keys);
 		foreach ($data as $i => $result) {
 			/* Allow 2d data arrays */
 			if ($model == '_NULL_') {
@@ -183,16 +188,12 @@ class TreeHelper extends AppHelper {
 					$hasChildren = $hasVisibleChildren = true;
 					$numberOfDirectChildren = count($result['children']);
 				}
-				$prevRow = prev($data);
-				if (!$prevRow) {
+				if ( $i == $firstKey ) {
 					$firstChild = true;
 				}
-				next($data);
-				$nextRow = next($data);
-				if (!$nextRow) {
+				if ( $i == $lastKey ) {
 					$lastChild = true;
 				}
-				prev($data);
 			} elseif (isset($result[$model][$left])) {
 				if ($result[$model][$left] != ($result[$model][$right] - 1)) {
 					$hasChildren = true;
@@ -216,7 +217,8 @@ class TreeHelper extends AppHelper {
 				'numberOfTotalChildren' => $numberOfTotalChildren,
 				'firstChild' => $firstChild,
 				'lastChild' => $lastChild,
-				'hasVisibleChildren' => $hasVisibleChildren
+				'hasVisibleChildren' => $hasVisibleChildren,
+				'plugin' => $plugin
 			);
 			$this->__settings = array_merge($this->__settings, $elementData);
 			/* Main Content */
@@ -254,7 +256,7 @@ class TreeHelper extends AppHelper {
 			$return .= $content;
 			/* Suffix */
 			$__addType = false;
-			if ($hasVisibleChildren) {
+			if ($hasVisibleChildren && (!$maxDepth || ($depth+1) < $maxDepth) ) {
 				if ($numberOfDirectChildren) {
 					$settings['depth'] = $depth + 1;
 					$return .= $this->__suffix();

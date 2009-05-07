@@ -16,7 +16,21 @@ class Node extends AppModel {
 		),
 		'Containable'
 	);
-
+	var $belongsTo = array(
+		'ParentNode' => array(
+			'className' => 'Node',
+			'foreignKey' => 'parent_id'
+		)
+	);
+	var $hasMany = array(
+		'ChildNode' => array(
+			'className' => 'Node',
+			'foreignKey' => 'parent_id',
+			'conditions' => array(
+				'ChildNode.visible' => 1
+			)
+		)
+	);
 
 	function eavModel($template = null, $layout = null) {
 		if ( empty($template) ) {
@@ -77,8 +91,15 @@ class Node extends AppModel {
 
 	// Caches a URL.
 	function afterSave() {
-		if ( 'Url' != $this->data['Node']['type'] ) {
-			$this->saveField('url', $this->url(), array('validate' => false, 'callbacks' => false));
+
+		// Save field
+		if ( isset($this->data['Node']['type']) ) {
+			if ( !in_array($this->data['Node']['type'], array('Url', 'Menu')) ) {
+				$this->saveField('url', $this->url(), array('validate' => false, 'callbacks' => false));
+			}
+			if ( 'Menu' == $this->data['Node']['type'] ) {
+				$this->saveField('url', null, array('validate' => false, 'callbacks' => false));
+			}
 		}
 
 		// get all the children as they will be affected.
@@ -93,12 +114,22 @@ class Node extends AppModel {
 
 	function url() {
 		$path = $this->getPath($this->id);
-		$paths = Set::extract('/Node/slug', $path);
+
+		// skip the menu nodes.
+		$steps = array();
+		foreach ($path as $key => $step) {
+			if ( 'Menu' != $step['Node']['type'] ) {
+				$steps[] = $step;
+			}
+		}
+
+		$steps = Set::extract('/Node/slug', $steps);
 		$me = array_pop($path);
 		if ( $me['Node']['default'] ) {
-			array_pop($paths);
+			array_pop($steps);
 		}
-		$url = '/' . join('/', $paths);
+
+		$url = '/' . join('/', $steps);
 		return $url;
 	}
 }
