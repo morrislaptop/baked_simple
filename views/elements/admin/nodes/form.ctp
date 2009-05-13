@@ -1,6 +1,18 @@
 <?php
+	$javascript->codeBlock('
+		$(function() {
+			$("#NodeTitle").change(function() {
+				var menuTitle = $("#NodeMenuTitle")
+				if ( !menuTitle.attr("value") ) {
+					menuTitle.attr("value", this.value);
+				}
+			});
+		});
+	', array('inline' => false));
+
 	$session->flash();
 	echo $uniform->input('title', array('class' => 'title'));
+	echo $uniform->input('menu_title');
 	echo $uniform->input('parent_id', array('empty' => '- No Parent -'));
 	echo $uniform->input('type');
 	echo $uniform->input('url', array('label' => 'Url (only editable for Url Type)'));

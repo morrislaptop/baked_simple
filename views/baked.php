@@ -5,11 +5,20 @@ class BakedView extends View {
 
 	/**
 	* Content Items
+	* $name = Type of content field
+	* $args[0] = Name of content field
+	* $args[1] = Name of tab to put it in in Admin
+	* $args[2] = Misc options
 	*/
 	function __call($name, $args) {
 		return $this->viewVars['node']['Node'][$args[0]];
 	}
-	function flash($name, $args = array()) {
+	function image($name, $tab = 'Content', $args = array()) {
+		$value = $this->viewVars['node']['Node'][$name];
+		$value = str_replace('\\', '/', $value); // correct windows stupid DS for web
+		return $value;
+	}
+	function flash($name, $tab = 'Content', $args = array()) {
 		if ( !$this->swfobject ) {
 			$this->embedSwfobject();
 		}

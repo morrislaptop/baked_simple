@@ -3,7 +3,7 @@ class NodesController extends BakedSimpleAppController {
 
 	var $name = 'Nodes';
 	var $layout = 'app';
-	var $helpers = array('Eav.Eav', 'BakedSimple.Tree', 'BakedSimple.Firecake');
+	var $helpers = array('Eav.Eav', 'BakedSimple.Menu', 'BakedSimple.Firecake');
 	var $uses = array('BakedSimple.Node', 'BakedSimple.Shared');
 	var $components = array('BakedSimple.BakedSimple');
 
@@ -108,29 +108,31 @@ class NodesController extends BakedSimpleAppController {
 		$eavModel = $this->Node->eavModel($template);
 
 		// go through each field called and setup page attributes.
-		foreach ($templateFields as $attribute)
-		{
-			// reset so we don't update previously found attributes.
-			$this->Node->EavAttribute->create();
+		foreach ($templateFields as $tab => $attributes) {
+			foreach ($attributes as $attribute)
+			{
+				// reset so we don't update previously found attributes.
+				$this->Node->EavAttribute->create();
 
-			// check if one exists.
-			$conditions = array(
-				'name' => $attribute['name'],
-				'model' => $eavModel
-			);
-			$eav_attribute = $this->Node->EavAttribute->find('first', compact('conditions'));
-			if ( $eav_attribute ) {
-				$this->Node->EavAttribute->id = $eav_attribute['EavAttribute']['id']; // cause an update
+				// check if one exists.
+				$conditions = array(
+					'name' => $attribute['name'],
+					'model' => $eavModel
+				);
+				$eav_attribute = $this->Node->EavAttribute->find('first', compact('conditions'));
+				if ( $eav_attribute ) {
+					$this->Node->EavAttribute->id = $eav_attribute['EavAttribute']['id']; // cause an update
+				}
+
+				// convert options to php serialize string so we can use it later
+				if ( isset($attribute['options']) ) {
+					$attribute['options'] = serialize($attribute['options']);
+				}
+
+				// save or update, yay!
+				$attribute['model'] = $eavModel;
+				$this->Node->EavAttribute->save($attribute);
 			}
-
-			// convert options to php serialize string so we can use it later
-			if ( isset($attribute['options']) ) {
-				$attribute['options'] = serialize($attribute['options']);
-			}
-
-			// save or update, yay!
-			$attribute['model'] = $eavModel;
-			$this->Node->EavAttribute->save($attribute);
 		}
 
 		return $templateFields;

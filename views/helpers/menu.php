@@ -28,7 +28,7 @@
  *
  * Helper to generate tree representations of MPTT or recursively nested data
  */
-class TreeHelper extends AppHelper {
+class MenuHelper extends AppHelper {
 /**
  * name property
  *

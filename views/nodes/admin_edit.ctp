@@ -13,15 +13,21 @@
 	<?php echo $uniform->create('Node');?>
 		<div id="tabs">
 			<?php
-				echo $navigation->create(
-					array(
-					    'Content Setup' => '#setup',
-					    'Content' => '#pagecontent',
-						'View' => array('action' => 'view', $this->data['Node']['id']),
-					    'All Content' => array('action' => 'index'),
-					),
-				    array('id' => 'sub-nav')
-			    );
+				$tabs = array(
+					'Properties' => '#setup',
+				);
+				
+				// add the tabs for content fields.
+				$contentTabs = array_keys($attributes);
+				$safeContentTabs = array();
+				foreach ($contentTabs as $ct) {
+					$safe = preg_replace('/\W/', '', $ct);
+					$safeContentTabs[$ct] = '#' . $safe;
+				}
+				
+				$tabs = array_merge($tabs, $safeContentTabs);
+				    
+				echo $navigation->create($tabs, array('id' => 'sub-nav'));
 			?>
 			<div id="setup">
 				<fieldset class="blockLabels">
@@ -29,11 +35,19 @@
 					<?php echo $this->element('admin' . DS . 'nodes' . DS . 'form'); ?>
 				</fieldset>
 			</div>
-			<div id="pagecontent">
-				<?php
-					echo $eav->inputs($attributes);
-				?>
-			</div>
+			<?php
+				foreach ($attributes as $tab => $fields)
+				{
+					$safe = preg_replace('/\W/', '', $tab);
+					?>
+					<div id="<?php echo $safe; ?>">
+						<?php
+							echo $eav->inputs($fields);
+						?>					
+					</div>
+					<?php
+				}
+			?>
 			<div class="ctrlHolder buttonHolder">
 				<?php echo $html->link(__('<< List Content', true), array('action'=>'index'), array('class' => 'resetButton'));?>
 				<?php echo $uniform->submit('Save & List Content', array('div' => false, 'name' => 'saveList')); ?>

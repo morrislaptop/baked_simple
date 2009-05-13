@@ -10,7 +10,7 @@ if ( $this->here == $data['Node']['url'] ) {
 	$classes[] = 'current';
 }
 if ( $data['Node']['url'] ) {
-	echo $html->link($data['Node']['title'], $data['Node']['url'], array('class' => implode(' ', $classes)));
+	echo $html->link($data['Node']['menu_title'], $data['Node']['url'], array('class' => implode(' ', $classes)));
 }
 else {
 	echo $data['Node']['title'];
