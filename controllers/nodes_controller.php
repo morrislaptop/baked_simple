@@ -3,7 +3,7 @@ class NodesController extends BakedSimpleAppController {
 
 	var $name = 'Nodes';
 	var $layout = 'app';
-	var $helpers = array('Eav.Eav', 'BakedSimple.Menu', 'BakedSimple.Firecake');
+	var $helpers = array('BakedSimple.Menu', 'BakedSimple.Firecake', 'Media');
 	var $uses = array('BakedSimple.Node', 'BakedSimple.Shared');
 	var $components = array('BakedSimple.BakedSimple');
 
@@ -64,7 +64,12 @@ class NodesController extends BakedSimpleAppController {
 		if (empty($this->data['Node']['id']) ) {
 			$this->data['Node']['id'] = $id;
 		}
-		$this->_setAttributes();
+		if ( 'Page' == $this->data['Node']['type'] ) {
+			$this->_setAttributes();
+		}
+		else {
+			$this->set('attributes', array());
+		}
 		$this->_setFormData();
 		$this->render('admin_edit');
 	}
@@ -93,8 +98,8 @@ class NodesController extends BakedSimpleAppController {
 			$template = $this->data['Node']['template'];
 			$layout = $this->data['Node']['layout'];
 		}
-		$template = '/' . str_replace('.ctp', '', $template);
-		$layout = array_pop(explode('/', str_replace('.ctp', '', $layout)));
+		$template = DS . $template;
+		$layout = array_pop(explode(DS, $layout));
 
 		// include the file, which will be calling field() methods. Since it is being
 		// called within this class, then we can automatically create attributes in the

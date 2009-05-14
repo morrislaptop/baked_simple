@@ -16,7 +16,7 @@ class BakedView extends View {
 	function image($name, $tab = 'Content', $args = array()) {
 		$value = $this->viewVars['node']['Node'][$name];
 		$value = str_replace('\\', '/', $value); // correct windows stupid DS for web
-		return $value;
+		return '/' . $value;
 	}
 	function flash($name, $tab = 'Content', $args = array()) {
 		if ( !$this->swfobject ) {

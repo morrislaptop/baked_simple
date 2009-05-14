@@ -16,7 +16,7 @@
 				$tabs = array(
 					'Properties' => '#setup',
 				);
-				
+
 				// add the tabs for content fields.
 				$contentTabs = array_keys($attributes);
 				$safeContentTabs = array();
@@ -24,9 +24,9 @@
 					$safe = preg_replace('/\W/', '', $ct);
 					$safeContentTabs[$ct] = '#' . $safe;
 				}
-				
+
 				$tabs = array_merge($tabs, $safeContentTabs);
-				    
+
 				echo $navigation->create($tabs, array('id' => 'sub-nav'));
 			?>
 			<div id="setup">
@@ -36,14 +36,21 @@
 				</fieldset>
 			</div>
 			<?php
+				#debug($this->data);
 				foreach ($attributes as $tab => $fields)
 				{
 					$safe = preg_replace('/\W/', '', $tab);
 					?>
 					<div id="<?php echo $safe; ?>">
 						<?php
-							echo $eav->inputs($fields);
-						?>					
+							foreach ($fields as $input )
+							{
+								if ( in_array($input['type'], array('image', 'flash', 'file')) ) {
+									echo $media->display('/' . $this->data['Node'][$input['name']]);
+								}
+								echo $uniform->input($input['name']);
+							}
+						?>
 					</div>
 					<?php
 				}

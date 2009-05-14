@@ -48,7 +48,7 @@ class BakedSimpleComponent extends Object {
 		}
 
 		// get template and layout so we can return them from this function
-		$template = '/' . $node['Node']['template'];
+		$template = DS . $node['Node']['template'];
 		$layout = $node['Node']['layout'];
 
 		// get menu

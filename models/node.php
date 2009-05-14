@@ -32,6 +32,29 @@ class Node extends AppModel {
 		)
 	);
 
+	/**
+	* Modifies app and template fields to the DS system
+	* is currently running on - otherwise after a transfer is cant
+	* find the files.
+	*
+	* @param mixed $results
+	* @return mixed
+	*/
+	function afterFind($results) {
+		foreach ($results as &$result) {
+			if ( !isset($result['Node']) ) {
+				continue;
+			}
+			if ( isset($result['Node']['template']) ) {
+				$result['Node']['template'] = str_replace(array('/', '\\'), DS, $result['Node']['template']);
+			}
+			if ( isset($result['Node']['layout']) ) {
+				$result['Node']['layout'] = str_replace(array('/', '\\'), DS, $result['Node']['layout']);
+			}
+		}
+		return $results;
+	}
+
 	function eavModel($template = null, $layout = null) {
 		if ( empty($template) ) {
 			$template = $this->quietField('template');
