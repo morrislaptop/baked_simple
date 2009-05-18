@@ -60,6 +60,7 @@ class NodesController extends BakedSimpleAppController {
 			$conditions = array('Node.id' => $id);
 			$eav = true;
 			$this->data = $this->Node->find('first', compact('conditions', 'eav'));
+			$this->set('node', $this->data);
 		}
 		if (empty($this->data['Node']['id']) ) {
 			$this->data['Node']['id'] = $id;
@@ -229,8 +230,7 @@ class NodesController extends BakedSimpleAppController {
 
 			// turn into english.
 			$path = array_shift(explode('.', str_replace(VIEWS, '', $view)));
-			$file = new File($view);
-			$templates[$path] = Inflector::humanize($file->name());
+			$templates[$path] = Inflector::humanize($path);
 		}
 		return $templates;
 	}

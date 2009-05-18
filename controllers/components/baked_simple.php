@@ -26,14 +26,16 @@ class BakedSimpleComponent extends Object {
 	/**
 	* Called when the controller wants to fetch the data from the CMS for the template (not called automatically on purpose
 	*/
-	function pull(&$controller) {
+	function pull(&$controller, $url = null) {
 		// get node
 		$Node = ClassRegistry::init('BakedSimple.Node');
 		$Shared = ClassRegistry::init('BakedSimple.Shared');
 
 		// get page
-		$url = '/' . $controller->params['url']['url'];
-		$url = str_replace('//', '/', $url);
+		if ( !$url ) {
+			$url = '/' . $controller->params['url']['url'];
+			$url = str_replace('//', '/', $url);
+		}
 		$conditions = array('Node.url' => $url);
 		$eav = true;
 		$contain = array('ParentNode', 'ChildNode');
