@@ -59,7 +59,9 @@ class NodesController extends BakedSimpleAppController {
 		if (empty($this->data)) {
 			$conditions = array('Node.id' => $id);
 			$eav = true;
-			$this->data = $this->Node->find('first', compact('conditions', 'eav'));
+			$contain = array('NodeAlias');
+			$this->data = $this->Node->find('first', compact('conditions', 'eav', 'contain'));
+			$this->data['Node']['aliases'] = implode("\n", Set::extract('/alias', $this->data['NodeAlias']));
 			$this->set('node', $this->data);
 		}
 		if (empty($this->data['Node']['id']) ) {
@@ -82,6 +84,7 @@ class NodesController extends BakedSimpleAppController {
 		if ( $this->templateErrors ) {
 			$this->Session->setFlash(implode("\n", $this->templateErrors), 'default', array('class' => 'errorMsg'));
 		}
+
 		$this->set(compact('attributes'));
 	}
 
@@ -111,10 +114,11 @@ class NodesController extends BakedSimpleAppController {
 		$this->Node->bindModel(array('hasMany' => array('EavAttribute')));
 
 		// get what the alias would be based on the template.
-		$eavModel = $this->Node->eavModel($template);
+		$eavModel = $this->Node->eavModel($this->data);
 
 		// go through each field called and setup page attributes.
-		foreach ($templateFields as $tab => $attributes) {
+		foreach ($templateFields as $tab => $attributes)
+		{
 			foreach ($attributes as $attribute)
 			{
 				// reset so we don't update previously found attributes.

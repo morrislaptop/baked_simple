@@ -48,7 +48,7 @@
 								if ( isset($this->data['Node'][$input['name']]) && in_array($input['type'], array('image', 'flash', 'file')) ) {
 									echo $media->display('/' . $this->data['Node'][$input['name']]);
 								}
-								echo $uniform->input($input['name']);
+								echo $uniform->input($input['name'], $input);
 							}
 						?>
 					</div>

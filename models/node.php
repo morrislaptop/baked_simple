@@ -12,7 +12,7 @@ class Node extends AppModel {
 			'overwrite' => true
 		),
 		'Eav.Eav' => array(
-			'alias' => 'eavModel'
+			'appendToEavModel' => array('layout', 'template')
 		),
 		'Containable'
 	);
@@ -29,7 +29,8 @@ class Node extends AppModel {
 			'conditions' => array(
 				'ChildNode.visible' => 1
 			)
-		)
+		),
+		'NodeAlias'
 	);
 
 	/**
@@ -55,23 +56,6 @@ class Node extends AppModel {
 		return $results;
 	}
 
-	function eavModel($template = null, $layout = null) {
-		if ( empty($template) ) {
-			$template = $this->quietField('template');
-		}
-		if ( empty($layout) ) {
-			$layout = $this->quietField('layout');
-		}
-		$alias = $layout . '/' . $template;
-		$dotPos = strrpos($alias, '.');
-		if ( $dotPos !== false ) {
-			$alias = substr($template, 0, $dotPos);
-		}
-		$alias = ucwords(str_replace(array('/', '\\'), ' ', $alias));
-		$alias = str_replace(' ', '', $alias);
-		return $this->alias . $alias;
-	}
-
 	function content($name, $type, $options)
 	{
 		$reserved = array_keys($this->schema());
@@ -86,36 +70,24 @@ class Node extends AppModel {
 		);
 	}
 
-	/**
-	* Transfers rights to the EAV behavior
-	*
-	* @param mixed $column
-	*/
-	function getColumnType($column) {
-		if ( parent::schema(array_pop(explode('.', $column))) ) {
-			return parent::getColumnType($column);
-		}
-		$eavType = $this->Behaviors->dispatchMethod($this, 'getColumnType', array($column));
-		if ( !$eavType || $eavType === array('unhandled') ) {
-			$eavType = parent::getColumnType($column);
-		}
-		return $eavType;
-	}
-	function schema($field = false) {
-		$eavSchema = $this->Behaviors->dispatchMethod($this, 'schema', array($field));
-		if ( !$eavSchema || $eavSchema === array('unhandled') ) {
-			$eavSchema = parent::schema($field);
-		}
-		return $eavSchema;
-	}
-	function parentSchema($field = false) {
-		return parent::schema($field);
-	}
-
 	// Caches a URL.
 	function afterSave() {
 
-		// Save field
+		// Save all alises.
+		if ( !empty($this->data['Node']['aliases']) ) {
+			$aliases = explode("\n", $this->data['Node']['aliases']);
+			$this->NodeAlias->deleteAll(array('node_id' => $this->id));
+			$data = array(
+				'node_id' => $this->id
+			);
+			foreach ($aliases as $alias) {
+				$this->NodeAlias->create();
+				$data['alias'] = trim($alias);
+				$this->NodeAlias->save($data);
+			}
+		}
+
+		// Save this URL
 		if ( isset($this->data['Node']['type']) ) {
 			if ( !in_array($this->data['Node']['type'], array('Url', 'Menu')) ) {
 				$this->saveField('url', $this->url(), array('validate' => false, 'callbacks' => false));
@@ -125,7 +97,7 @@ class Node extends AppModel {
 			}
 		}
 
-		// get all the children as they will be affected.
+		// Save URL for all children.
 		$id = $this->id;
 		$children = $this->children($this->id);
 		foreach ($children as $child) {

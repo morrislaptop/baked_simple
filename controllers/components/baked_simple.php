@@ -41,6 +41,20 @@ class BakedSimpleComponent extends Object {
 		$contain = array('ParentNode', 'ChildNode');
 		$node = $Node->find('first', compact('conditions', 'eav', 'contain'));
 
+		// try getting URL by alias.
+		if ( !$node ) {
+			$conditions = array(
+				'\'' . $url . '\' REGEXP `alias`'
+			);
+			$node_alias = $Node->NodeAlias->find('first', compact('conditions'));
+			if ( $node_alias ) {
+				$conditions = array(
+					'Node.id' => $node_alias['NodeAlias']['node_id']
+				);
+				$node = $Node->find('first', compact('conditions', 'eav', 'contain'));
+			}
+		}
+
 		// catch a missing page here.
 		if ( !$node ) {
 			$conditions = array(
@@ -59,7 +73,8 @@ class BakedSimpleComponent extends Object {
 		$conditions = array(
 			'visible' => 1
 		);
-		$nodes  = $Node->find('threaded', compact('contain', 'order', 'conditions'));
+		$fields = array('Node.id', 'Node.title', 'Node.menu_title', 'Node.parent_id', 'Node.url', 'Node.slug');
+		$nodes  = $Node->find('threaded', compact('contain', 'order', 'conditions', 'fields'));
 
 		// get global content
 		$shareds = $Shared->find('all');
@@ -70,7 +85,7 @@ class BakedSimpleComponent extends Object {
 		);
 		$contain = array();
 		$order = 'lft ASC';
-		$siblings = $Node->find('all', compact('conditions', 'contain', 'order'));
+		$siblings = $Node->find('all', compact('conditions', 'contain', 'order', 'fields'));
 
 		// run
 		$controller->set(compact('nodes', 'node', 'shareds', 'siblings'));

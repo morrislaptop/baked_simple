@@ -16,6 +16,7 @@
 	echo $uniform->input('parent_id', array('empty' => '- No Parent -'));
 	echo $uniform->input('type');
 	echo $uniform->input('url', array('label' => 'Url (only editable for Url Type)'));
+	echo $uniform->input('aliases', array('label' => 'Node Aliases', 'type' => 'textarea', 'after' => '<p class="formHint">Node aliases allow this node to be access from different URLs. One per line. Use a MySQL Regex</p>'));
 	echo $uniform->input('layout');
 	echo $uniform->input('template');
 	echo $uniform->input('enabled', array('checked' => isset($this->data['Node']['enabled']) ? $this->data['Node']['enabled'] : true ));
