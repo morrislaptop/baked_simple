@@ -3,6 +3,7 @@ class SharedsController extends AppController {
 
 	var $name = 'Shareds';
 	var $helpers = array('Uniform.Uniform');
+	var $layout = 'app';
 
 	function admin_index() {
 		$this->Shared->recursive = 0;

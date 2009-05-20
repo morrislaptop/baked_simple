@@ -149,15 +149,8 @@ class NodesController extends BakedSimpleAppController {
 	}
 
 	function _mimicRender($template, $layout = 'ajax') {
-		$viewClass = 'BakedSimple.BakedAdmin';
-		if ($viewClass != 'View') {
-			if (strpos($viewClass, '.') !== false) {
-				list($plugin, $viewClass) = explode('.', $viewClass);
-			}
-			$viewClass = $viewClass . 'View';
-			App::import('View', 'BakedSimple.BakedAdmin');
-		}
-		$View = new $viewClass($this, true);
+		App::import('View', 'BakedSimple.BakedAdmin');
+		$View = new BakedAdminView($this, true);
 		$View->render($template, $layout);
 		ClassRegistry::removeObject('view');
 		return $View->templateFields;

@@ -12,23 +12,29 @@
 <div class="nodes form">
 	<?php echo $uniform->create('Node');?>
 		<div id="tabs">
-			<?php
-				$tabs = array(
-					'Properties' => '#setup',
-				);
+			<ul id="sub-nav">
+				<?php
+					$tabs = array(
+						'Properties' => '#setup',
+					);
 
-				// add the tabs for content fields.
-				$contentTabs = array_keys($attributes);
-				$safeContentTabs = array();
-				foreach ($contentTabs as $ct) {
-					$safe = preg_replace('/\W/', '', $ct);
-					$safeContentTabs[$ct] = '#' . $safe;
-				}
+					// add the tabs for content fields.
+					$contentTabs = array_keys($attributes);
+					$safeContentTabs = array();
+					foreach ($contentTabs as $ct) {
+						$safe = preg_replace('/\W/', '', $ct);
+						$safeContentTabs[$ct] = '#' . $safe;
+					}
 
-				$tabs = array_merge($tabs, $safeContentTabs);
+					$tabs = array_merge($tabs, $safeContentTabs);
 
-				echo $navigation->create($tabs, array('id' => 'sub-nav'));
-			?>
+					foreach ($tabs as $label => $url) {
+						?>
+						<li><?php echo $html->link($label, $url); ?></li>
+						<?php
+					}
+				?>
+			</ul>
 			<div id="setup">
 				<fieldset class="blockLabels">
  					<legend><?php __('Edit Content');?></legend>
