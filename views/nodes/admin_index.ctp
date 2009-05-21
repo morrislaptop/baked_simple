@@ -64,7 +64,6 @@ foreach ($nodes as $node):
 			<?php echo $node['Node']['modified']; ?>
 		</td>
 		<td class="actions">
-			<?php echo $html->link(__('View', true), array('action'=>'view', $node['Node']['id'])); ?>
 			<?php echo $html->link(__('Edit', true), array('action'=>'edit', $node['Node']['id'])); ?>
 			<?php echo $html->link(__('Delete', true), array('action'=>'delete', $node['Node']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $node['Node']['id'])); ?>
 		</td>
