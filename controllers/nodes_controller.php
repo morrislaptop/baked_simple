@@ -3,7 +3,7 @@ class NodesController extends BakedSimpleAppController {
 
 	var $name = 'Nodes';
 	var $layout = 'app';
-	var $helpers = array('BakedSimple.Menu', 'BakedSimple.Firecake', 'Media');
+	var $helpers = array('BakedSimple.Menu', 'BakedSimple.Firecake');
 	var $uses = array('BakedSimple.Node', 'BakedSimple.Shared');
 	var $components = array('BakedSimple.BakedSimple');
 

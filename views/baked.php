@@ -1,8 +1,6 @@
 <?php
 class BakedView extends View {
 
-	var $swfobject = false;
-
 	/**
 	* Content Items
 	* $name = Type of content field
@@ -19,22 +17,8 @@ class BakedView extends View {
 		return '/' . $value;
 	}
 	function flash($name, $tab = 'Content', $args = array()) {
-		if ( !$this->swfobject ) {
-			$this->embedSwfobject();
-		}
-		$id = 'flash' . intval(mt_rand());
-		$js = $this->loaded['javascript'];
-		$out = '<div id="' . $id . '"><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></div>';
-		$out .= $js->codeBlock('
-			swfobject.embedSWF("' . $this->viewVars['node']['Node'][$name] . '", "' . $id . '", "' . $args['width'] . '", "' . $args['height'] . '", "9.0.0", false);
-		');
-		return $out;
-	}
-
-	function embedSwfobject() {
-		$js = $this->loaded['javascript'];
-		$js->link('swfobject/swfobject', false);
-		$this->swfobject = true;
+		$media = $this->loaded['media'];
+		return $media->display('/' . $this->viewVars['node']['Node'][$name]);
 	}
 
 

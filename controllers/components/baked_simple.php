@@ -39,7 +39,8 @@ class BakedSimpleComponent extends Object {
 		$conditions = array('Node.url' => $url);
 		$eav = true;
 		$contain = array('ParentNode', 'ChildNode');
-		$node = $Node->find('first', compact('conditions', 'eav', 'contain'));
+		$fields = array('Node.*', 'ParentNode.*');
+		$node = $Node->find('first', compact('conditions', 'eav', 'contain', 'fields'));
 
 		// try getting URL by alias.
 		if ( !$node ) {
@@ -51,7 +52,7 @@ class BakedSimpleComponent extends Object {
 				$conditions = array(
 					'Node.id' => $node_alias['NodeAlias']['node_id']
 				);
-				$node = $Node->find('first', compact('conditions', 'eav', 'contain'));
+				$node = $Node->find('first', compact('conditions', 'eav', 'contain', 'fields'));
 			}
 		}
 
@@ -60,7 +61,7 @@ class BakedSimpleComponent extends Object {
 			$conditions = array(
 				'Node.id' => Configure::read('App.BakedSimple.missing_node_id')
 			);
-			$node = $Node->find('first', compact('conditions', 'eav', 'contain'));
+			$node = $Node->find('first', compact('conditions', 'eav', 'contain', 'fields'));
 		}
 
 		// get template and layout so we can return them from this function
