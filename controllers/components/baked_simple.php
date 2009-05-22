@@ -59,7 +59,7 @@ class BakedSimpleComponent extends Object {
 		// catch a missing page here.
 		if ( !$node ) {
 			$conditions = array(
-				'Node.id' => Configure::read('App.BakedSimple.missing_node_id')
+				'Node.id' => Configure::read('BakedSimple.missing_node_id')
 			);
 			$node = $Node->find('first', compact('conditions', 'eav', 'contain', 'fields'));
 		}
