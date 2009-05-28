@@ -11,7 +11,7 @@
 	', array('inline' => false));
 
 	$session->flash();
-	echo $uniform->input('title', array('class' => 'title'));
+	echo $uniform->input('title', array('class' => 'textInput title'));
 	echo $uniform->input('menu_title');
 	echo $uniform->input('parent_id', array('empty' => '- No Parent -'));
 	echo $uniform->input('type');

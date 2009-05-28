@@ -79,6 +79,7 @@ class NodesController extends BakedSimpleAppController {
 	}
 
 	function _setAttributes() {
+		// Sync attributes with the template
 		$attributes = $this->syncEavAttributes();
 
 		// put template errors in the session.
@@ -118,9 +119,9 @@ class NodesController extends BakedSimpleAppController {
 		$eavModel = $this->Node->eavModel($this->data);
 
 		// go through each field called and setup page attributes.
-		foreach ($templateFields as $tab => $attributes)
+		foreach ($templateFields as $tab => &$attributes)
 		{
-			foreach ($attributes as $attribute)
+			foreach ($attributes as &$attribute)
 			{
 				// reset so we don't update previously found attributes.
 				$this->Node->EavAttribute->create();
@@ -143,6 +144,7 @@ class NodesController extends BakedSimpleAppController {
 				// save or update, yay!
 				$attribute['model'] = $eavModel;
 				$this->Node->EavAttribute->save($attribute);
+				$attribute['id'] = $this->Node->EavAttribute->id;
 			}
 		}
 

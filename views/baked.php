@@ -13,12 +13,23 @@ class BakedView extends View {
 	}
 	function image($name, $tab = 'Content', $args = array()) {
 		$value = $this->viewVars['node']['Node'][$name];
-		$value = str_replace('\\', '/', $value); // correct windows stupid DS for web
-		return '/' . $value;
+		$url = $this->_getUrlForEavFile($value);
+		return $url;
 	}
 	function flash($name, $tab = 'Content', $args = array()) {
 		$media = $this->loaded['media'];
-		return $media->display('/' . $this->viewVars['node']['Node'][$name]);
+		$value = $this->viewVars['node']['Node'][$name];
+		$url = $this->_getUrlForEavFile($value);
+		return $media->display($url);
+	}
+
+	/**
+	* Returns a valid URL for a file type eav.
+	*/
+	function _getUrlForEavFile($value) {
+		$url = '/' . $value['dir'] . '/' . $value['value'];
+		$url = str_replace('\\', '/', $url);
+		return $url;
 	}
 
 

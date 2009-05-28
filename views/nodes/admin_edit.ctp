@@ -1,4 +1,8 @@
 <?php
+	/**
+	* @var JavascriptHelper
+	*/
+	$javascript;
 	$html->css('/baked_simple/css/jquery.ui.tabs', 'stylesheet', null, false);
 	$javascript->link('/baked_simple/js/jquery.ui.core', false);
 	$javascript->link('/baked_simple/js/jquery.ui.tabs', false);
@@ -6,6 +10,8 @@
 	echo $javascript->codeBlock('
 		$(function() {
 			$("#tabs").tabs();
+			// append a preview link with javascript so it doesnt get picked up by tabs.
+			$("#sub-nav").append("<li class=\'sub-nav-view\'>' . $javascript->escapeString($html->link(__('Preview', true), $uniform->value('Node.url'), array('target' => '_blank'))) . '</li>");
 		});
 	', array('inline' => false));
 ?>
@@ -33,6 +39,7 @@
 						<li><?php echo $html->link($label, $url); ?></li>
 						<?php
 					}
+
 				?>
 			</ul>
 			<div id="setup">
@@ -48,17 +55,37 @@
 					$safe = preg_replace('/\W/', '', $tab);
 					?>
 					<div id="<?php echo $safe; ?>">
-						<?php
-							foreach ($fields as $input )
-							{
-								if ( isset($this->data['Node'][$input['name']]) && in_array($input['type'], array('image', 'flash', 'file')) ) {
-									echo $media->display('/' . $this->data['Node'][$input['name']]);
+						<fieldset>
+							<legend><?php echo $tab; ?></legend>
+							<?php
+								foreach ($fields as $input )
+								{
+									$name = $input['name'];
+									unset($input['name']);
+
+									if ( isset($this->data['Node'][$name]) && in_array($input['type'], array('image', 'flash', 'file')) ) {
+										$mediaId = 'media' . intval(mt_rand());
+										$deleteId = 'delete' . intval(mt_rand());
+										echo $html->div('media', $media->display(str_replace('\\', '/', '/' . $this->data['Node'][$name]['dir'] . '/' . $this->data['Node'][$name]['value'])), array('id' => $mediaId));
+										$input['after'] = $html->link('Delete', array('plugin' => 'eav', 'controller' => 'eav_attribute_files', 'action' => 'delete', $input['model'], $this->data['Node']['id'], $input['id']), array('id' => $deleteId));
+										echo $uniform->input($name, $input);
+
+										$javascript->codeBlock('
+											$(function() {
+												$("#' . $deleteId . '").click(function() {
+													$.get(this.href, function (data) {
+														$("#' . $mediaId . '").remove();
+													});
+													return false;
+												});
+											});
+										', array('inline' => false));
+										continue;
+									}
+									echo $uniform->input($name, $input);
 								}
-								$name = $input['name'];
-								unset($input['name']);
-								echo $uniform->input($name, $input);
-							}
-						?>
+							?>
+						</fieldset>
 					</div>
 					<?php
 				}
