@@ -38,7 +38,7 @@ class BakedView extends View {
 	*/
 	function shared($name) {
 		$content = Set::extract('/Shared[title=' . $name . ']', $this->viewVars['shareds']);
-		echo $content[0]['Shared']['content'];
+		return $content[0]['Shared']['content'];
 	}
 
 	/**
