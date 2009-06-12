@@ -1,12 +1,12 @@
+<?php echo $html->css('tables', false, false, false); ?>
 <div class="shareds index">
 <h2><?php __('Shared Content');?> <small><?php echo $html->link(__('Create Shared Content', true), array('action'=>'add')); ?></small></h2>
-<?php $session->flash(); ?>
 <table cellpadding="0" cellspacing="0">
 <tr>
-	<th>#</th>
+	<th class="headerLeft">#</th>
 	<th>Title</th>
 	<th>Modified</th>
-	<th class="actions"><?php __('Actions');?></th>
+	<th class="headerRight actions"><?php __('Actions');?></th>
 </tr>
 <?php
 $i = 0;
@@ -33,5 +33,6 @@ foreach ($shareds as $shared):
 		</td>
 	</tr>
 <?php endforeach; ?>
+	<?php echo $this->element('tfoot', array('plugin' => 'advindex', 'cols' => 3)); ?>
 </table>
 </div>

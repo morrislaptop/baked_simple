@@ -1,7 +1,7 @@
 <?php
 class BakedSimpleAppController extends AppController
 {
-	var $helpers = array('Html', 'Form', 'Javascript', 'Uniform.Uniform');
+	var $helpers = array('Html', 'Form', 'Javascript', 'Advform');
 	var $components = array('Auth');
 
 	function admin_save_order($id = null)
