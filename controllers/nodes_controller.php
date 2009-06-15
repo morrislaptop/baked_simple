@@ -2,7 +2,6 @@
 class NodesController extends BakedSimpleAppController {
 
 	var $name = 'Nodes';
-	var $layout = 'app';
 	var $helpers = array('BakedSimple.Menu', 'BakedSimple.Firecake');
 	var $uses = array('BakedSimple.Node', 'BakedSimple.Shared');
 	var $components = array('BakedSimple.BakedSimple');
@@ -11,6 +10,11 @@ class NodesController extends BakedSimpleAppController {
 	* @var Node
 	*/
 	var $Node;
+	
+	function beforeFilter() {
+		parent::beforeFilter();
+		$this->Auth->allow('display', 'sitemap');
+	}
 
 	function admin_index() {
 		$this->Node->recursive = 0;
@@ -36,7 +40,7 @@ class NodesController extends BakedSimpleAppController {
 			if ($this->Node->save($this->data)) {
 				$this->_saveRedirect();
 			} else {
-				$this->Session->setFlash(__('The page could not be saved. Please, try again.', true), 'default', array('class' => 'errorMsg'));
+				$this->Session->setFlash(__('The page could not be saved. Please, try again.', true), 'default', array('class' => 'success'));
 			}
 		}
 		$this->_setFormData();
@@ -53,7 +57,7 @@ class NodesController extends BakedSimpleAppController {
 			if ( $save ) {
 				$this->_saveRedirect();
 			} else {
-				$this->Session->setFlash(__('The page could not be saved. Please, try again.', true), 'default', array('class' => 'errorMsg'));
+				$this->Session->setFlash(__('The page could not be saved. Please, try again.', true), 'default', array('class' => 'error'));
 			}
 		}
 		if (empty($this->data)) {
@@ -83,7 +87,7 @@ class NodesController extends BakedSimpleAppController {
 
 		// put template errors in the session.
 		if ( $this->templateErrors ) {
-			$this->Session->setFlash(implode("\n", $this->templateErrors), 'default', array('class' => 'errorMsg'));
+			$this->Session->setFlash(implode("\n", $this->templateErrors), 'default', array('class' => 'error'));
 		}
 
 		$this->set(compact('attributes'));
@@ -159,7 +163,7 @@ class NodesController extends BakedSimpleAppController {
 	}
 
 	function _saveRedirect() {
-		$this->Session->setFlash(__('The page has been saved', true), 'default', array('class' => 'OKMsg'));
+		$this->Session->setFlash(__('The page has been saved', true), 'default', array('class' => 'success'));
 		if ( !empty($this->params['form']['saveList']) ) {
 			$this->redirect(array('action'=>'index'));
 		}

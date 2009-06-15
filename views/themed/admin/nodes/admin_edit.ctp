@@ -64,12 +64,21 @@
 									unset($input['name']);
 									$id = $input['id'];
 									unset($input['id']);
-									$input['name'] = 'test';
 
-									if ( isset($this->data['Node'][$name]) && in_array($input['type'], array('image', 'flash', 'file')) ) {
+									if ( isset($this->data['Node'][$name]) && in_array($input['type'], array('image', 'media', 'document')) ) {
 										$mediaId = 'media' . intval(mt_rand());
 										$deleteId = 'delete' . intval(mt_rand());
-										echo $html->div('media', $media->display(str_replace('\\', '/', '/' . $this->data['Node'][$name]['dir'] . '/' . $this->data['Node'][$name]['value'])), array('id' => $mediaId));
+										
+										// decide URL it could be a straight url or use the dir column as well
+										if ( !empty($this->data['Node'][$name]['dir']) ) {
+											$url = '/' . $this->data['Node'][$name]['dir'] . '/' . $this->data['Node'][$name]['value'];
+										}
+										else {
+											$url = $this->data['Node'][$name]['value'];
+											$form->data['Node'][$name] = $url;
+										}
+										
+										echo $html->div('media', $media->display(str_replace('\\', '/', $url)), array('id' => $mediaId));
 										$input['after'] = $html->link('Delete', array('plugin' => 'eav', 'controller' => 'eav_attribute_files', 'action' => 'delete', $input['model'], $this->data['Node']['id'], $id), array('id' => $deleteId));
 										echo $advform->input($name, $input);
 

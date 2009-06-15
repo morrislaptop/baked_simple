@@ -11,7 +11,9 @@
 		});
 	', array('inline' => false));
 
+	// Steal the flash message so it doesnt look gay with the tabs
 	$session->flash();
+	
 	echo $advform->input('title', array('class' => 'textInput title'));
 	echo $advform->input('menu_title');
 	echo $advform->input('parent_id', array('empty' => '- No Parent -'));

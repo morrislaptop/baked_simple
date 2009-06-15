@@ -16,7 +16,7 @@ class BakedView extends View {
 		$url = $this->_getUrlForEavFile($value);
 		return $url;
 	}
-	function flash($name, $tab = 'Content', $args = array()) {
+	function media($name, $tab = 'Content', $args = array()) {
 		$media = $this->loaded['media'];
 		$value = $this->viewVars['node']['Node'][$name];
 		$url = $this->_getUrlForEavFile($value);
@@ -27,7 +27,12 @@ class BakedView extends View {
 	* Returns a valid URL for a file type eav.
 	*/
 	function _getUrlForEavFile($value) {
-		$url = '/' . $value['dir'] . '/' . $value['value'];
+		if ( !empty($value['dir']) ) {
+			$url = '/' . $value['dir'] . '/' . $value['value'];	
+		}
+		else {
+			$url = $value['value'];
+		}
 		$url = str_replace('\\', '/', $url);
 		return $url;
 	}
