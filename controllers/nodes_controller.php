@@ -52,7 +52,6 @@ class NodesController extends BakedSimpleAppController {
 			$save = $this->Node->save($this->data);
 			if ( $save ) {
 				$this->_saveRedirect();
-				#exit;
 			} else {
 				$this->Session->setFlash(__('The page could not be saved. Please, try again.', true), 'default', array('class' => 'errorMsg'));
 			}

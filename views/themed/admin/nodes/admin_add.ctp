@@ -1,5 +1,5 @@
 <div class="nodes form">
-  <?php echo $uniform->create('Node', array('class' => 'uniForm'));?>
+  <?php echo $advform->create('Node', array('class' => 'uniForm'));?>
     <div id="tabs">
       <ul id="sub-nav">
         <li><a href="#"><span>Properties</span></a></li>
@@ -8,13 +8,13 @@
     <div id="setup">
       <fieldset class="blockLabels">
          <legend><?php __('Create Content');?></legend>
-         <?php echo $this->element('admin' . DS . 'nodes' . DS . 'form'); ?>
+         <?php echo $this->element('nodes' . DS . 'form'); ?>
       </fieldset>
     </div>
     <div class="ctrlHolder buttonHolder">
       <?php echo $html->link(__('<< List Content', true), array('action'=>'index'), array('class' => 'resetButton'));?>
-      <?php echo $uniform->submit('Save & List Content', array('div' => false, 'name' => 'saveList')); ?>
-      <?php echo $uniform->submit('Save & Continue', array('div' => false, 'class' => 'primaryAction', 'name' => 'saveEdit')); ?>
+      <?php echo $advform->submit('Save & List Content', array('div' => false, 'name' => 'saveList')); ?>
+      <?php echo $advform->submit('Save & Continue', array('div' => false, 'class' => 'primaryAction', 'name' => 'saveEdit')); ?>
     </div>
-  <?php echo $uniform->end();?>
+  <?php echo $advform->end();?>
 </div>
