@@ -209,6 +209,13 @@ class MenuHelper extends AppHelper {
 					$lastChild = true;
 				}
 			}
+			if ( $firstChild ) {
+				$this->addItemAttribute('class', 'first');
+			}
+			if ( $lastChild ) {
+				$this->addItemAttribute('class', 'last');
+			}
+			
 			$elementData = array(
 				'data' => $result,
 				'depth' => $depth?$depth:count($stack),
@@ -218,7 +225,7 @@ class MenuHelper extends AppHelper {
 				'firstChild' => $firstChild,
 				'lastChild' => $lastChild,
 				'hasVisibleChildren' => $hasVisibleChildren,
-				'plugin' => $plugin
+				'plugin' => $plugin,
 			);
 			$this->__settings = array_merge($this->__settings, $elementData);
 			/* Main Content */

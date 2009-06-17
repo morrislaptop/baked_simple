@@ -16,7 +16,7 @@
 	
 	echo $advform->input('title', array('class' => 'textInput title'));
 	echo $advform->input('menu_title');
-	echo $advform->input('parent_id', array('empty' => '- No Parent -'));
+	echo $advform->input('parent_id', array('empty' => '- No Parent -', 'escape' => false));
 	echo $advform->input('type');
 	echo $advform->input('slug', array('after' => '<p class="formHint">Slug will be control what URL this content will be available from</p>'));
 	echo $advform->input('url', array('after' => '<p class="formHint">Only for URL type</p>'));
