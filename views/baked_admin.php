@@ -35,5 +35,15 @@ class BakedAdminView extends View {
 	function check() {
 		return true; // always returns true so all possible content fields get called
 	}
+	
+/**
+ * Never render the missing view page, allow the user to select a different template...
+ *
+ * @param string $viewFileName the filename that should exist
+ * @return cakeError
+ */
+	function _missingView($file, $error = 'missingView') {
+		
+	}
 }
 ?>
