@@ -226,7 +226,7 @@ class NodesController extends BakedSimpleAppController {
 		foreach ($views as $view) {
 			// exclude layouts and elements.
 			if ( strpos($view, DS . 'layouts'. DS) !== false ||
-				 strpos($view, DS . 'elements' . DS) !== false ||
+				 #strpos($view, DS . 'elements' . DS) !== false ||
 				 strpos($view, DS . Configure::read('Routing.admin') . '_') !== false ) {
 				continue;
 			}
