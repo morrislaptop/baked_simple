@@ -89,10 +89,9 @@ class BakedSimpleComponent extends Object {
 		$siblings = $Node->find('all', compact('conditions', 'contain', 'order', 'fields'));
 
 		// run
-		$controller->set(compact('nodes', 'node', 'shareds', 'siblings'));
-
-		// return the layout and template that the cms sets this URL to use.
-		return compact('layout', 'template');
+		$vars = compact('nodes', 'node', 'shareds', 'siblings', 'template', 'layout');
+		$controller->set($vars);
+		return $vars;
 	}
 }
 ?>
