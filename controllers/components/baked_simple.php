@@ -36,7 +36,10 @@ class BakedSimpleComponent extends Object {
 			$url = '/' . $controller->params['url']['url'];
 			$url = str_replace('//', '/', $url);
 		}
-		$conditions = array('Node.url' => $url);
+		$conditions = array(
+			'Node.url' => $url,
+			'Node.type' => 'Page'
+		);
 		$eav = true;
 		$contain = array('ParentNode', 'ChildNode');
 		$fields = array('Node.*', 'ParentNode.*');

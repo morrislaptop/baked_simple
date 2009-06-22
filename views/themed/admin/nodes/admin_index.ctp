@@ -78,11 +78,3 @@ foreach ($nodes as $node):
 <?php echo $this->element('tfoot', array('plugin' => 'advindex', 'cols' => 6)); ?>
 </table>
 </div>
-<?php
-  echo $javascript->codeBlock('
-    $(".paging a").click(function() {
-      $("#content").load(this.href);
-      return false;
-    });
-  ');
-?>
