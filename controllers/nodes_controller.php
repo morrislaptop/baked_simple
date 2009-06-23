@@ -231,9 +231,13 @@ class NodesController extends BakedSimpleAppController {
 				continue;
 			}
 
-			// turn into english.
+			// get local path and turn into english.
 			$path = array_shift(explode('.', str_replace(VIEWS, '', $view)));
-			$templates[$path] = Inflector::humanize($path);
+			$label = $path;
+			$label = str_replace('-', ' ', $label);
+			$label = str_replace(array('/','\\'), ' - ', $label);
+			$label = Inflector::humanize($label);
+			$templates[$path] = $label;
 		}
 		return $templates;
 	}
@@ -278,7 +282,9 @@ class NodesController extends BakedSimpleAppController {
 	    // this will move the employee node to the bottom of the parent list
 
 	    $this->Node->id = $node;
+	    #$this->Node->Behaviors->disable('Eav');
 	    $this->Node->saveField('parent_id', $parent);
+	    #$this->Node->Behaviors->enable('Eav');
 
 	    // If position == 0, then we move it straight to the top
 	    // otherwise we calculate the distance to move ($delta).

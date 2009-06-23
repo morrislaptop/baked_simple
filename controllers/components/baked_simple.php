@@ -90,9 +90,12 @@ class BakedSimpleComponent extends Object {
 		$contain = array();
 		$order = 'lft ASC';
 		$siblings = $Node->find('all', compact('conditions', 'contain', 'order', 'fields'));
+		
+		// get breadcrumb
+		$breadcrumb = $Node->getPath($node['Node']['id']);
 
 		// run
-		$vars = compact('nodes', 'node', 'shareds', 'siblings', 'template', 'layout');
+		$vars = compact('nodes', 'node', 'shareds', 'siblings', 'template', 'layout', 'breadcrumb');
 		$controller->set($vars);
 		return $vars;
 	}

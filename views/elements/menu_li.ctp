@@ -14,9 +14,9 @@ if ( $data['Node']['url'] ) {
 		'id' => $data['Node']['slug'],
 		'class' => implode(' ', $classes)
 	);
-	echo $html->link($data['Node']['menu_title'], $data['Node']['url'], $atts);
+	echo $html->link('<span>' . $data['Node']['menu_title'] . '</span>', $data['Node']['url'], $atts, false, false);
 }
 else {
-	echo $data['Node']['title'];
+	echo '<span>' . $data['Node']['title'] . '</span>';
 }
 ?>
