@@ -4,13 +4,9 @@
 <?php $session->flash(); ?>
 <table cellpadding="0" cellspacing="0">
 <tr>
-  <th class="headerLeft">#</th>
+  <th width="5%" class="headerLeft">#</th>
   <th>Title</th>
-  <th>Type</th>
-  <th>Template</th>
-  <th>Url</th>
-  <th>Modified</th>
-  <th class="headerRight actions"><?php __('Actions');?></th>
+  <th width="10%" class="headerRight actions"><?php __('Actions');?></th>
 </tr>
 <?php
 $levels = array();
@@ -50,19 +46,8 @@ foreach ($nodes as $node):
       <?php echo implode('.', $levelCounts); ?> (<?php echo $node['Node']['id']; ?>)
     </td>
     <td style="padding-left: <?php echo 30 * $level + 5; ?>px;">
-      - <?php echo $node['Node']['title']; ?>
-    </td>
-    <td>
-      <?php echo $node['Node']['type']; ?>
-    </td>
-    <td>
-      <?php echo $node['Node']['template']; ?>
-    </td>
-    <td>
-      <?php echo $node['Node']['url']; ?>
-    </td>
-    <td>
-      <?php echo $node['Node']['modified']; ?>
+      - <?php echo $node['Node']['title']; ?><br />
+      <small style="color: #ccc; font-size: 11px;"><?php echo $node['Node']['url']; ?></small>
     </td>
     <td class="actions">
       <?php

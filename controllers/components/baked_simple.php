@@ -38,7 +38,6 @@ class BakedSimpleComponent extends Object {
 		}
 		$conditions = array(
 			'Node.url' => $url,
-			'Node.type' => 'Page'
 		);
 		$eav = true;
 		$contain = array('ParentNode', 'ChildNode');
@@ -57,6 +56,20 @@ class BakedSimpleComponent extends Object {
 				);
 				$node = $Node->find('first', compact('conditions', 'eav', 'contain', 'fields'));
 			}
+		}
+		
+		// catch containers, find the next page and redirect there.
+		if ( 'Container' == $node['Node']['type'] ) {
+			$conditions = array(
+				'Node.type' => 'Page',
+				'Node.lft >' => $node['Node']['lft'],
+				'Node.rght <' => $node['Node']['rght']
+			);
+			$order = 'Node.lft ASC';
+			$contain = array();
+			$fields = array('Node.url');
+			$node = $Node->find('first', compact('conditions', 'order', 'contain', 'fields'));
+			$controller->redirect($node['Node']['url']);
 		}
 
 		// catch a missing page here.

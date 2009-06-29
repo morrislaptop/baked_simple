@@ -148,6 +148,9 @@ class NodesController extends BakedSimpleAppController {
 				$attribute['model'] = $eavModel;
 				$this->Node->EavAttribute->save($attribute);
 				$attribute['id'] = $this->Node->EavAttribute->id;
+				
+				// merge our optiosn with the attribute.
+				$attribute = array_merge($attribute, unserialize($attribute['options']));
 			}
 		}
 
