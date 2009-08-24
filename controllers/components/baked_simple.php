@@ -26,14 +26,15 @@ class BakedSimpleComponent extends Object {
 	/**
 	* Called when the controller wants to fetch the data from the CMS for the template (not called automatically on purpose
 	*/
-	function pull(&$controller, $url = null) {
+	function pull($url = null) 
+	{
 		// get node
 		$Node = ClassRegistry::init('BakedSimple.Node');
-		$Shared = ClassRegistry::init('BakedSimple.Shared');
+		$Snippet = ClassRegistry::init('BakedSimple.Snippet');
 
 		// get page
 		if ( !$url ) {
-			$url = '/' . $controller->params['url']['url'];
+			$url = '/' . $this->controller->params['url']['url'];
 			$url = str_replace('//', '/', $url);
 		}
 		$conditions = array(
@@ -69,7 +70,7 @@ class BakedSimpleComponent extends Object {
 			$contain = array();
 			$fields = array('Node.url');
 			$node = $Node->find('first', compact('conditions', 'order', 'contain', 'fields'));
-			$controller->redirect($node['Node']['url']);
+			$this->controller->redirect($node['Node']['url']);
 		}
 
 		// catch a missing page here.
@@ -94,7 +95,7 @@ class BakedSimpleComponent extends Object {
 		$nodes  = $Node->find('threaded', compact('contain', 'order', 'conditions', 'fields'));
 
 		// get global content
-		$shareds = $Shared->find('all');
+		$snippets = $Snippet->find('all');
 
 		// get siblings for the wicked as menus.
 		$conditions = array(
@@ -108,8 +109,8 @@ class BakedSimpleComponent extends Object {
 		$breadcrumb = $Node->getPath($node['Node']['id']);
 
 		// run
-		$vars = compact('nodes', 'node', 'shareds', 'siblings', 'template', 'layout', 'breadcrumb');
-		$controller->set($vars);
+		$vars = compact('nodes', 'node', 'snippets', 'siblings', 'template', 'layout', 'breadcrumb');
+		$this->controller->set($vars);
 		return $vars;
 	}
 }

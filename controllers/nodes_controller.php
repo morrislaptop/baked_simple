@@ -2,9 +2,9 @@
 class NodesController extends BakedSimpleAppController {
 
 	var $name = 'Nodes';
-	var $helpers = array('BakedSimple.Menu', 'BakedSimple.Firecake');
-	var $uses = array('BakedSimple.Node', 'BakedSimple.Shared');
-	var $components = array('BakedSimple.BakedSimple');
+	var $helpers = array('BakedSimple.Menu', 'Advindex.Advindex');
+	var $uses = array('BakedSimple.Node', 'BakedSimple.Snippet');
+	var $components = array('BakedSimple.BakedSimple', 'Advindex.Advindex', 'RequestHandler');
 
 	/**
 	* @var Node
@@ -109,6 +109,12 @@ class NodesController extends BakedSimpleAppController {
 		}
 		$template = DS . $template;
 		$layout = array_pop(explode(DS, $layout));
+		
+		// check if files exist, otherwise return early...
+		if ( !file_exists(VIEWS . $template . '.ctp') || !is_file(VIEWS . $template . '.ctp') 
+			|| !file_exists(LAYOUTS . $layout . '.ctp') || !is_file(LAYOUTS . $layout . '.ctp') ) {
+			return array();
+		}
 
 		// include the file, which will be calling field() methods. Since it is being
 		// called within this class, then we can automatically create attributes in the

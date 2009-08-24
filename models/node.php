@@ -8,13 +8,15 @@ class Node extends AppModel {
 	);
 	var $actsAs = array(
 		'Tree',
-		'Sluggable' => array(
-			'overwrite' => false
+		'Util.Sluggable' => array(
+			'overwrite' => true
 		),
 		'Eav.Eav' => array(
 			'appendToEavModel' => array('layout', 'template')
 		),
-		'Containable'
+		'Containable',
+		'Util.Default' => array('group_fields' => 'Node.parent_id'),
+		'Forest.Leaf'
 	);
 	var $belongsTo = array(
 		'ParentNode' => array(
@@ -126,6 +128,42 @@ class Node extends AppModel {
 
 		$url = '/' . join('/', $steps);
 		return $url;
+	}
+	
+/**
+ * moveUp method
+ *
+ * After calling the tree behavior method, reset the sequences
+ *
+ * @param mixed $id
+ * @param mixed $steps
+ * @param bool $auto
+ * @return void
+ * @access public
+ */
+	function moveUp($id = null, $steps = null, $auto = true) {
+		if ($this->Behaviors->Tree->moveUp($this, $id, $steps) && $auto) {
+			$this->Behaviors->Leaf->resetSequences($this, $this->field('parent_id'));
+		}
+		return;
+	}
+
+/**
+ * moveDown method
+ *
+ * After calling the tree behavior method, reset the sequences
+ *
+ * @param mixed $id
+ * @param mixed $steps
+ * @param bool $auto
+ * @return void
+ * @access public
+ */
+	function moveDown($id = null, $steps = null, $auto = true) {
+		if ($this->Behaviors->Tree->moveDown($this, $id, $steps) && $auto) {
+			$this->Behaviors->Leaf->resetSequences($this, $this->field('parent_id'));
+		}
+		return;
 	}
 }
 ?>
