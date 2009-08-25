@@ -23,8 +23,6 @@ class AppSchema extends CakeSchema {
 	var $nodes = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
 		'parent_id' => array('type' => 'integer', 'null' => true, 'default' => NULL),
-		'lft' => array('type' => 'integer', 'null' => true, 'default' => NULL),
-		'rght' => array('type' => 'integer', 'null' => true, 'default' => NULL),
 		'type' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 20),
 		'title' => array('type' => 'string', 'null' => true, 'default' => NULL),
 		'menu_title' => array('type' => 'string', 'null' => true, 'default' => NULL),
@@ -35,6 +33,20 @@ class AppSchema extends CakeSchema {
 		'enabled' => array('type' => 'boolean', 'null' => true, 'default' => NULL),
 		'visible' => array('type' => 'boolean', 'null' => true, 'default' => NULL),
 		'default' => array('type' => 'boolean', 'null' => true, 'default' => NULL),
+		'lft' => array('type' => 'integer', 'null' => true, 'default' => NULL),
+		'rght' => array('type' => 'integer', 'null' => true, 'default' => NULL),
+		'depth' => array('type' => 'integer', 'null' => true, 'default' => NULL),
+		'sequence' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
+		'first' => array('type' => 'boolean', 'null' => true, 'default' => NULL),
+		'last' => array('type' => 'boolean', 'null' => true, 'default' => NULL),
+		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
+	);
+	var $snippets = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
+		'title' => array('type' => 'string', 'null' => true, 'default' => NULL),
+		'content' => array('type' => 'text', 'null' => true, 'default' => NULL),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
