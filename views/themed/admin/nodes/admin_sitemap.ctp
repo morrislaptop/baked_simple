@@ -1,9 +1,9 @@
 <?php
-    echo $html->css('/baked_simple/js/ext-2.0.1/resources/css/ext-custom', 'stylesheet', false);
-    echo $javascript->link('/baked_simple/js/ext-2.0.1/ext-custom', false);
+    echo $html->css('/js/ext-2.0.1/resources/css/ext-custom', 'stylesheet', false);
+    echo $javascript->link('/js/ext-2.0.1/ext-custom', false);
 
     $js = <<<JS
-Ext.BLANK_IMAGE_URL = '{$html->url('/baked_simple/js/ext-2.0.1/resources/images/default/s.gif')}';
+Ext.BLANK_IMAGE_URL = '{$html->url('/js/ext-2.0.1/resources/images/default/s.gif')}';
 
 $(function(){
 
