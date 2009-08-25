@@ -10,7 +10,7 @@ class NodesController extends BakedSimpleAppController {
 	* @var Node
 	*/
 	var $Node;
-	
+
 	function beforeFilter() {
 		parent::beforeFilter();
 		$this->Auth->allow('display', 'sitemap');
@@ -109,9 +109,9 @@ class NodesController extends BakedSimpleAppController {
 		}
 		$template = DS . $template;
 		$layout = array_pop(explode(DS, $layout));
-		
+
 		// check if files exist, otherwise return early...
-		if ( !file_exists(VIEWS . $template . '.ctp') || !is_file(VIEWS . $template . '.ctp') 
+		if ( !file_exists(VIEWS . $template . '.ctp') || !is_file(VIEWS . $template . '.ctp')
 			|| !file_exists(LAYOUTS . $layout . '.ctp') || !is_file(LAYOUTS . $layout . '.ctp') ) {
 			return array();
 		}
@@ -154,7 +154,7 @@ class NodesController extends BakedSimpleAppController {
 				$attribute['model'] = $eavModel;
 				$this->Node->EavAttribute->save($attribute);
 				$attribute['id'] = $this->Node->EavAttribute->id;
-				
+
 				// merge our optiosn with the attribute.
 				$attribute = array_merge($attribute, unserialize($attribute['options']));
 			}
@@ -316,14 +316,14 @@ class NodesController extends BakedSimpleAppController {
 
 	function display() {
 		// use internal component to get data
-		$template_layout = $this->BakedSimple->pull($this);
+		$template_layout = $this->BakedSimple->pull();
 
 		// auto render the template
 		$this->render($template_layout['template'], $template_layout['layout']);
 	}
 
 	function sitemap() {
-		$this->BakedSimple->pull($this);
+		$this->BakedSimple->pull();
 	}
 }
 ?>
