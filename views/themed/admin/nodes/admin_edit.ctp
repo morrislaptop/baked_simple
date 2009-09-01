@@ -3,9 +3,9 @@
 	* @var JavascriptHelper
 	*/
 	$javascript;
-	$html->css('/baked_simple/css/jquery.ui.tabs', 'stylesheet', null, false);
-	$javascript->link('/baked_simple/js/jquery.ui.core', false);
-	$javascript->link('/baked_simple/js/jquery.ui.tabs', false);
+	$html->css('jquery.ui.tabs', 'stylesheet', null, false);
+	$javascript->link('jquery.ui.core', false);
+	$javascript->link('jquery.ui.tabs', false);
 
 	echo $javascript->codeBlock('
 		$(function() {
@@ -68,7 +68,7 @@
 									if ( isset($this->data['Node'][$name]) && in_array($input['type'], array('image', 'media', 'document')) ) {
 										$mediaId = 'media' . intval(mt_rand());
 										$deleteId = 'delete' . intval(mt_rand());
-										
+
 										// decide URL it could be a straight url or use the dir column as well
 										if ( !empty($this->data['Node'][$name]['dir']) ) {
 											$url = '/' . $this->data['Node'][$name]['dir'] . '/' . $this->data['Node'][$name]['value'];
@@ -77,8 +77,8 @@
 											$url = $this->data['Node'][$name]['value'];
 											$form->data['Node'][$name] = $url;
 										}
-										
-										echo $html->div('media', $media->display(str_replace('\\', '/', $url)), array('id' => $mediaId));
+
+										echo $html->div('media', $medium->embed(str_replace('\\', '/', $url)), array('id' => $mediaId));
 										$input['after'] = $html->link('Delete', array('plugin' => 'eav', 'controller' => 'eav_attribute_files', 'action' => 'delete', $input['model'], $this->data['Node']['id'], $id), array('id' => $deleteId));
 										echo $advform->input($name, $input);
 

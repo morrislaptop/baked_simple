@@ -7,7 +7,7 @@
 	<tr>
 		<th class="headerLeft"><?php echo $paginator->sort('id'); ?></th>
 		<th><?php echo $paginator->sort('type'); ?></th>
-		<th><?php echo $paginator->sort('title'); ?></th>
+		<th><?php echo $paginator->sort('Title', 'lft'); ?></th>
 		<th><?php echo $paginator->sort('template'); ?></th>
 		<th><?php echo $paginator->sort('enabled'); ?></th>
 		<th><?php echo $paginator->sort('visible'); ?></th>
@@ -39,12 +39,12 @@ foreach ($nodes as $node):
 		<td style="padding-left: <?php echo $node['Node']['depth'] * 50 + 10; ?>px; text-align: left;">
 			<?php
 				if ( $node['Node']['url'] ) {
-					echo $html->link($node['Node']['title'], $node['Node']['url'], array('target' => '_blank')); 
+					echo $html->link($node['Node']['title'], $node['Node']['url'], array('target' => '_blank'));
 				}
 				else {
 					echo $node['Node']['title'];
 				}
-			?> 
+			?>
 			<span style="color: #ccc; font-size: 10px;">(<?php echo $node['Node']['menu_title']; ?>)</span>
 		</td>
 		<td>

@@ -122,14 +122,14 @@ class Node extends AppModel {
 
 		$steps = Set::extract('/Node/slug', $steps);
 		$me = array_pop($path);
-		if ( $me['Node']['default'] ) {
+		if ( false && $me['Node']['default'] ) {
 			array_pop($steps);
 		}
 
 		$url = '/' . join('/', $steps);
 		return $url;
 	}
-	
+
 /**
  * moveUp method
  *
