@@ -4,7 +4,7 @@ class NodesController extends BakedSimpleAppController {
 	var $name = 'Nodes';
 	var $helpers = array('Forest.Menu', 'Advindex.Advindex');
 	var $uses = array('BakedSimple.Node', 'BakedSimple.Snippet');
-	var $components = array('BakedSimple.BakedSimple', 'Advindex.Advindex', 'RequestHandler');
+	var $components = array('BakedSimple.BakedSimple', 'Advindex.Advindex', 'RequestHandler', 'Forest.Map');
 
 	/**
 	* @var Node
@@ -249,69 +249,6 @@ class NodesController extends BakedSimpleAppController {
 			$templates[$path] = $label;
 		}
 		return $templates;
-	}
-
-	function admin_nodes()
-	{
-	    // retrieve the node id that Ext JS posts via ajax
-	    $parent = isset($this->params['form']['node']) ? intval($this->params['form']['node']) : null;
-
-	    // find all the nodes underneath the parent node defined above
-	    // the second parameter (true) means we only want direct children
-	    $nodes = $this->Node->children($parent, true);
-
-	    // send the nodes to our view
-	    $this->set(compact('nodes'));
-	}
-
-	function admin_reorder()
-	{
-	    // retrieve the node instructions from javascript
-	    // delta is the difference in position (1 = next node, -1 = previous node)
-	    $node = intval($this->params['form']['node']);
-	    $delta = intval($this->params['form']['delta']);
-
-	    if ($delta > 0) {
-	        $this->Node->movedown($node, abs($delta));
-	    } elseif ($delta < 0) {
-	        $this->Node->moveup($node, abs($delta));
-	    }
-
-	    // send success response
-	    exit('1');
-	}
-
-	function admin_reparent()
-	{
-	    $node = intval($this->params['form']['node']);
-	    $parent = intval($this->params['form']['parent']);
-	    $position = intval($this->params['form']['position']);
-
-	    // save the employee node with the new parent id
-	    // this will move the employee node to the bottom of the parent list
-
-	    $this->Node->id = $node;
-	    #$this->Node->Behaviors->disable('Eav');
-	    $this->Node->saveField('parent_id', $parent);
-	    #$this->Node->Behaviors->enable('Eav');
-
-	    // If position == 0, then we move it straight to the top
-	    // otherwise we calculate the distance to move ($delta).
-	    // We have to check if $delta > 0 before moving due to a bug
-	    // in the tree behavior (https://trac.cakephp.org/ticket/4037)
-
-	    if ($position == 0){
-	        $this->Node->moveup($node, true);
-	    } else {
-	        $count = $this->Node->childcount($parent, true);
-	        $delta = $count-$position-1;
-	        if ($delta > 0){
-	            $this->Node->moveup($node, $delta);
-	        }
-	    }
-
-	    // send success response
-	    exit('1');
 	}
 
 	function display() {
