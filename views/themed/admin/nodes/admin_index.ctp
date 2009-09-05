@@ -37,15 +37,17 @@ foreach ($nodes as $node):
 			<?php echo $node['Node']['type']; ?>
 		</td>
 		<td style="padding-left: <?php echo $node['Node']['depth'] * 50 + 10; ?>px; text-align: left;">
-			<?php
-				if ( $node['Node']['url'] ) {
-					echo $html->link($node['Node']['title'], $node['Node']['url'], array('target' => '_blank'));
-				}
-				else {
-					echo $node['Node']['title'];
-				}
+			<?php echo $html->link($node['Node']['title'], array('action'=>'edit', $node['Node']['id'])); ?>
+			<span style="color: #ccc; font-size: 10px;">(
+				<?php
+					if ( $node['Node']['url'] ) {
+						echo $html->link($node['Node']['menu_title'], $node['Node']['url'], array('target' => '_blank', 'style' => 'color: #ccc;'));
+					}
+					else {
+						echo $node['Node']['menu_title'];
+					}
 			?>
-			<span style="color: #ccc; font-size: 10px;">(<?php echo $node['Node']['menu_title']; ?>)</span>
+			)</span>
 		</td>
 		<td>
 			<?php echo $node['Node']['layout']; ?> / <?php echo $node['Node']['template']; ?>
