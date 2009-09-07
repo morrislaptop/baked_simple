@@ -2,7 +2,7 @@
 class NodesController extends BakedSimpleAppController {
 
 	var $name = 'Nodes';
-	var $helpers = array('Forest.Menu', 'Advindex.Advindex');
+	var $helpers = array('Forest.Menu', 'Advindex.Advindex', 'Media.Medium');
 	var $uses = array('BakedSimple.Node', 'BakedSimple.Snippet');
 	var $components = array('BakedSimple.BakedSimple', 'Advindex.Advindex', 'RequestHandler', 'Forest.Map');
 

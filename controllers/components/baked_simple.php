@@ -26,7 +26,7 @@ class BakedSimpleComponent extends Object {
 	/**
 	* Called when the controller wants to fetch the data from the CMS for the template (not called automatically on purpose
 	*/
-	function pull($url = null) 
+	function pull($url = null)
 	{
 		// get node
 		$Node = ClassRegistry::init('BakedSimple.Node');
@@ -58,7 +58,7 @@ class BakedSimpleComponent extends Object {
 				$node = $Node->find('first', compact('conditions', 'eav', 'contain', 'fields'));
 			}
 		}
-		
+
 		// catch containers, find the next page and redirect there.
 		if ( 'Container' == $node['Node']['type'] ) {
 			$conditions = array(
@@ -104,13 +104,18 @@ class BakedSimpleComponent extends Object {
 		$contain = array();
 		$order = 'lft ASC';
 		$siblings = $Node->find('all', compact('conditions', 'contain', 'order', 'fields'));
-		
+
 		// get breadcrumb
 		$breadcrumb = $Node->getPath($node['Node']['id']);
 
-		// run
+		// set variables
 		$vars = compact('nodes', 'node', 'snippets', 'siblings', 'template', 'layout', 'breadcrumb');
 		$this->controller->set($vars);
+
+		// make controller use the baked simple view
+		$this->controller->view = 'BakedSimple.Baked';
+
+		// return the variables so the controller can use them if needed
 		return $vars;
 	}
 }

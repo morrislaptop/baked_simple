@@ -3,9 +3,9 @@
 	* @var JavascriptHelper
 	*/
 	$javascript;
-	$html->css('jquery.ui.tabs', 'stylesheet', null, false);
-	$javascript->link('jquery.ui.core', false);
-	$javascript->link('jquery.ui.tabs', false);
+	$html->css('/vendors/jquery.ui/jquery.ui.tabs', 'stylesheet', null, false);
+	$javascript->link('/vendors/jquery.ui/jquery.ui.core', false);
+	$javascript->link('/vendors/jquery.ui/jquery.ui.tabs', false);
 
 	echo $javascript->codeBlock('
 		$(function() {
