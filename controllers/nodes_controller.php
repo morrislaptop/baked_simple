@@ -37,7 +37,8 @@ class NodesController extends BakedSimpleAppController {
 	function admin_add() {
 		if (!empty($this->data)) {
 			$this->Node->create();
-			if ($this->Node->save($this->data)) {
+			$this->_splitAliases();
+			if ($this->Node->saveAll($this->data)) {
 				$this->_saveRedirect();
 			} else {
 				$this->Session->setFlash(__('The page could not be saved. Please, try again.', true), 'default', array('class' => 'success'));
@@ -53,7 +54,9 @@ class NodesController extends BakedSimpleAppController {
 		}
 		if (!empty($this->data)) {
 			$this->Node->id = $id;
-			$save = $this->Node->save($this->data);
+			$this->data['Node']['id'] = $id;
+			$this->_splitAliases();
+			$save = $this->Node->saveAll($this->data);
 			if ( $save ) {
 				$this->_saveRedirect();
 			} else {
@@ -65,7 +68,7 @@ class NodesController extends BakedSimpleAppController {
 			$eav = true;
 			$contain = array('NodeAlias');
 			$this->data = $this->Node->find('first', compact('conditions', 'eav', 'contain'));
-			$this->data['Node']['aliases'] = implode("\n", Set::extract('/alias', $this->data['NodeAlias']));
+			$this->data['NodeAlias']['alias'] = implode("\n", Set::extract('/alias', $this->data['NodeAlias']));
 			$this->set('node', $this->data);
 		}
 		if (empty($this->data['Node']['id']) ) {
@@ -79,6 +82,22 @@ class NodesController extends BakedSimpleAppController {
 		}
 		$this->_setFormData();
 		$this->render('admin_edit');
+	}
+
+	function _splitAliases()
+	{
+		// Delete existing.
+		$this->Node->NodeAlias->deleteAll(array('node_id' => $this->Node->id));
+
+		// Collect them all
+		$aliases = explode("\n", $this->data['NodeAlias']['alias']);
+		unset($this->data['NodeAlias']['alias']);
+		$aliases = array_map('trim', $aliases);
+		foreach ($aliases as $alias) {
+			$this->data['NodeAlias'][] = array(
+				'alias' => $alias
+			);
+		}
 	}
 
 	function _setAttributes() {
