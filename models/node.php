@@ -72,22 +72,8 @@ class Node extends AppModel {
 		);
 	}
 
-	// Caches a URL.
-	function afterSave() {
-
-		// Save all alises.
-		if ( !empty($this->data['Node']['aliases']) ) {
-			$aliases = explode("\n", $this->data['Node']['aliases']);
-			$this->NodeAlias->deleteAll(array('node_id' => $this->id));
-			$data = array(
-				'node_id' => $this->id
-			);
-			foreach ($aliases as $alias) {
-				$this->NodeAlias->create();
-				$data['alias'] = trim($alias);
-				$this->NodeAlias->save($data);
-			}
-		}
+	function afterSave()
+	{
 
 		// Save this URL
 		if ( isset($this->data['Node']['type']) ) {
