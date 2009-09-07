@@ -1,5 +1,4 @@
 <?php
-    echo $html->css('forms', false, false, false);
 	$javascript->codeBlock('
 		$(function() {
 			$("#NodeTitle").change(function() {
@@ -8,18 +7,36 @@
 					menuTitle.attr("value", this.value);
 				}
 			});
+			$("#NodeType").change(function() {
+				if ( "Url" == this.value ) {
+					$("#DivNodeUrl").show();
+				}
+				else {
+					$("#DivNodeUrl").hide();
+				}
+			});
 		});
 	', array('inline' => false));
 
+	$showUrl = empty($this->data['Node']['type']) || 'Url' == $this->data['Node']['type'];
+
 	// Steal the flash message so it doesnt look gay with the tabs
 	$session->flash();
-	
+
 	echo $advform->input('title', array('class' => 'textInput title'));
 	echo $advform->input('menu_title');
 	echo $advform->input('parent_id', array('empty' => '- No Parent -', 'escape' => false));
 	echo $advform->input('type');
-	echo $advform->input('slug', array('after' => '<p class="formHint">Slug will be control what URL this content will be available from</p>'));
-	echo $advform->input('url', array('after' => '<p class="formHint">Only for URL type</p>'));
+	$opts = array(
+		'after' => '<p class="formHint">Only for URL type</p>',
+	);
+	if ( !$showUrl ) {
+		$opts['div'] = array(
+			'style' => 'display: none;',
+			'id' => 'DivNodeUrl'
+		);
+	}
+	echo $advform->input('url', $opts);
 	echo $advform->input('aliases', array('label' => 'Node Aliases', 'type' => 'textarea', 'after' => '<p class="formHint">Node aliases allow this node to be access from different URLs. One per line. Use a MySQL Regex</p>'));
 	echo $advform->input('layout');
 	echo $advform->input('template');
