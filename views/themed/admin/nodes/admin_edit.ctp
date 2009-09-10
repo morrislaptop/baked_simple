@@ -14,6 +14,16 @@
 			$("#sub-nav").append("<li class=\'sub-nav-view\'>' . $javascript->escapeString($html->link(__('Preview', true), $advform->value('Node.url'), array('target' => '_blank'))) . '</li>");
 		});
 	', array('inline' => false));
+
+	// Register all the body classes with the tinymce helper before we include it...
+	foreach ($attributes as $tab => $fields) {
+		foreach ($fields as $field) {
+			if ( 'wysiwyg' == $field['type'] && !empty($field['body_class']) ) {
+				$advform->setEntity('Node.' . $field['name']);
+				$advform->Tinymce->registerBodyClass($advform->domId(), $field['body_class']);
+			}
+		}
+	}
 ?>
 <div class="nodes form">
 	<?php echo $advform->create('Node', array('type' => 'file'));?>

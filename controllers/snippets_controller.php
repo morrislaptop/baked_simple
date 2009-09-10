@@ -2,6 +2,7 @@
 class SnippetsController extends AppController {
 
 	var $name = 'Snippets';
+	var $helpers = array('Advindex.Advindex');
 
 	function admin_index() {
 		$this->Snippet->recursive = 0;

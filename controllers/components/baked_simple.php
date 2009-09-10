@@ -8,6 +8,10 @@ class BakedSimpleComponent extends Object {
 
 	//called after Controller::beforeFilter()
 	function startup(&$controller) {
+		// make controller use the baked simple view (only if its the default one)
+		if ( 'View' == $controller->view ) {
+			$this->controller->view = 'BakedSimple.Baked';
+		}
 	}
 
 	//called after Controller::beforeRender()
@@ -39,6 +43,7 @@ class BakedSimpleComponent extends Object {
 		}
 		$conditions = array(
 			'Node.url' => $url,
+			'Node.type' => 'Page'
 		);
 		$eav = true;
 		$contain = array('ParentNode', 'ChildNode');
@@ -57,20 +62,6 @@ class BakedSimpleComponent extends Object {
 				);
 				$node = $Node->find('first', compact('conditions', 'eav', 'contain', 'fields'));
 			}
-		}
-
-		// catch containers, find the next page and redirect there.
-		if ( 'Container' == $node['Node']['type'] ) {
-			$conditions = array(
-				'Node.type' => 'Page',
-				'Node.lft >' => $node['Node']['lft'],
-				'Node.rght <' => $node['Node']['rght']
-			);
-			$order = 'Node.lft ASC';
-			$contain = array();
-			$fields = array('Node.url');
-			$node = $Node->find('first', compact('conditions', 'order', 'contain', 'fields'));
-			$this->controller->redirect($node['Node']['url']);
 		}
 
 		// catch a missing page here.
@@ -95,7 +86,7 @@ class BakedSimpleComponent extends Object {
 		$nodes  = $Node->find('threaded', compact('contain', 'order', 'conditions', 'fields'));
 
 		// get global content
-		$snippets = $Snippet->find('all');
+		$snippets = $Snippet->find('list', array('fields' => array('title', 'content')));
 
 		// get siblings for the wicked as menus.
 		$conditions = array(
@@ -111,9 +102,6 @@ class BakedSimpleComponent extends Object {
 		// set variables
 		$vars = compact('nodes', 'node', 'snippets', 'siblings', 'template', 'layout', 'breadcrumb');
 		$this->controller->set($vars);
-
-		// make controller use the baked simple view
-		$this->controller->view = 'BakedSimple.Baked';
 
 		// return the variables so the controller can use them if needed
 		return $vars;

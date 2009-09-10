@@ -9,7 +9,11 @@ class Node extends AppModel {
 	var $actsAs = array(
 		'Tree',
 		'Util.Sluggable' => array(
-			'overwrite' => true
+			'overwrite' => true,
+			'group_fields' => 'parent_id',
+			'group_conditions' => array(
+				'type' => array('Container', 'Page')
+			)
 		),
 		'Eav.Eav' => array(
 			'appendToEavModel' => array('layout', 'template')

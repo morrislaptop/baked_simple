@@ -1,12 +1,13 @@
 <?php
 $classes = array();
+$classes[] = 'menuLink' . $data['Node']['id'];
 if ( $firstChild ) {
 	$classes[] = 'first';
 }
 if ( $lastChild ) {
 	$classes[] = 'last';
 }
-if ( $this->here == $data['Node']['url'] ) {
+if ( $this->here == $data['Node']['url'] || (isset($node['Node']['id']) && $node['Node']['id'] == $data['Node']['id']) ) {
 	$classes[] = 'current';
 }
 if ( $data['Node']['url'] ) {

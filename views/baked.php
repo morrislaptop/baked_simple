@@ -28,7 +28,7 @@ class BakedView extends View {
 	*/
 	function _getUrlForEavFile($value) {
 		if ( !empty($value['dir']) ) {
-			$url = '/' . $value['dir'] . '/' . $value['value'];	
+			$url = '/' . $value['dir'] . '/' . $value['value'];
 		}
 		else {
 			$url = $value['value'];
@@ -51,6 +51,25 @@ class BakedView extends View {
 	*/
 	function check($name) {
 		return !empty($this->viewVars['node']['Node'][$name]);
+	}
+
+	/**
+	 * Returns the children from the recursive nodes variable, helps with sub menus that need to be relative to a parent page.
+	 */
+	function findChildren($node_id, $nodes = null)
+	{
+		if ( is_null($nodes) ) {
+			$nodes = $this->viewVars['nodes'];
+		}
+		foreach ($nodes as $node) {
+			if ( $node['Node']['id'] == $node_id ) {
+				return $node['children'];
+			}
+			else if ( $children = $this->findChildren($node_id, $node['children']) ) {
+				return $children;
+			}
+		}
+		return array();
 	}
 }
 ?>

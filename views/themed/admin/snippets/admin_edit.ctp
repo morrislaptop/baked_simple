@@ -11,5 +11,5 @@
 		<?php echo $advform->submit('Save & List Snippet Content', array('div' => false, 'name' => 'saveList')); ?>
 		<?php echo $advform->submit('Save & Continue', array('div' => false, 'class' => 'primaryAction', 'name' => 'saveEdit')); ?>
 	</div>
-<?php echo $uniform->end();?>
+<?php echo $advform->end();?>
 </div>

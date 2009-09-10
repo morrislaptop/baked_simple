@@ -32,10 +32,9 @@ class BakedAdminView extends View {
 
 	// Compatibility with BakedView
 	function shared() { }
-	function check() {
-		return true; // always returns true so all possible content fields get called
-	}
-	
+	function check() { return true; }
+	function findChildren() { }
+
 /**
  * Never render the missing view page, allow the user to select a different template...
  *
@@ -43,7 +42,7 @@ class BakedAdminView extends View {
  * @return cakeError
  */
 	function _missingView($file, $error = 'missingView') {
-		
+
 	}
 }
 ?>
