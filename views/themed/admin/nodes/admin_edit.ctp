@@ -26,7 +26,7 @@
 	}
 ?>
 <div class="nodes form">
-	<?php echo $advform->create('Node', array('type' => 'file'));?>
+	<?php echo $form->create('Node', array('type' => 'file'));?>
 		<div id="tabs">
 			<ul id="sub-nav">
 				<?php
@@ -114,9 +114,9 @@
 			?>
 			<div class="ctrlHolder buttonHolder">
 				<?php echo $html->link(__('<< List Content', true), array('action'=>'index'), array('class' => 'resetButton'));?>
-				<?php echo $advform->submit('Save & List Content', array('div' => false, 'name' => 'saveList')); ?>
-				<?php echo $advform->submit('Save & Continue', array('div' => false, 'class' => 'primaryAction', 'name' => 'saveEdit')); ?>
+				<?php echo $form->submit('Save & List Content', array('div' => false, 'name' => 'saveList')); ?>
+				<?php echo $form->submit('Save & Continue', array('div' => false, 'class' => 'primaryAction', 'name' => 'saveEdit')); ?>
 			</div>
 		</div>
-	<?php echo $advform->end();?>
+	<?php echo $form->end();?>
 </div>

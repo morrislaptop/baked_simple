@@ -1,13 +1,16 @@
-<?php echo $html->css('tables', false, false, false); ?>
 <div class="snippets index">
-<h2><?php __('Snippet Content');?> <small><?php echo $html->link(__('Create Snippet Content', true), array('action'=>'add')); ?></small></h2>
+<h2><?php __('Snippets');?></h2>
 <table cellpadding="0" cellspacing="0">
-<tr>
-	<th class="headerLeft">#</th>
-	<th>Title</th>
-	<th>Modified</th>
-	<th class="headerRight actions"><?php __('Actions');?></th>
-</tr>
+	<thead>
+		<tr>
+			<th class="headerLeft">#</th>
+			<th><?php echo $paginator->sort('title'); ?></th>
+			<th><?php echo $paginator->sort('type'); ?></th>
+			<th><?php echo $paginator->sort('modified'); ?></th>
+			<th class="headerRight actions"><?php __('Actions');?></th>
+		</tr>
+	</thead>
+	<tbody>
 <?php
 $i = 0;
 foreach ($snippets as $snippet):
@@ -24,6 +27,9 @@ foreach ($snippets as $snippet):
 			<?php echo $snippet['Snippet']['title']; ?>
 		</td>
 		<td>
+			<?php echo $snippet['Snippet']['type']; ?>
+		</td>
+		<td>
 			<?php echo $snippet['Snippet']['modified']; ?>
 		</td>
 		<td class="actions">
@@ -33,6 +39,14 @@ foreach ($snippets as $snippet):
 		</td>
 	</tr>
 <?php endforeach; ?>
-	<?php echo $this->element('tfoot', array('plugin' => 'advindex', 'cols' => 3)); ?>
+	</tbody>
+	<tfoot>
+		<?php echo $this->element('tfoot', array('plugin' => 'advindex', 'cols' => 4)); ?>
+	</tfoot>
 </table>
+</div>
+<div class="actions">
+	<ul>
+		<li><?php echo $html->link(__('New Snippet', true), array('action'=>'add')); ?></li>
+	</ul>
 </div>

@@ -7,6 +7,7 @@ class SnippetsController extends AppController {
 	function admin_index() {
 		$this->Snippet->recursive = 0;
 		$this->set('snippets', $this->paginate());
+		$this->_setFormData();
 	}
 
 	function admin_add() {
@@ -18,6 +19,7 @@ class SnippetsController extends AppController {
 				$this->Session->setFlash(__('The page could not be saved. Please, try again.', true), 'default', array('class' => 'errorMsg'));
 			}
 		}
+		$this->_setFormData();
 	}
 
 	function admin_edit($id = null) {
@@ -35,10 +37,18 @@ class SnippetsController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->Snippet->read(null, $id);
 		}
+		$this->_setFormData();
+	}
+	
+	function _setFormData() {
+		App::import('Helper', 'Advform.Advform');
+		$advform = new AdvformHelper();
+		$types = array_combine($advform->customTypes, $advform->customTypes);
+		$this->set(compact('types'));
 	}
 
 	function _saveRedirect() {
-		$this->Session->setFlash(__('The shared content has been saved', true), 'default', array('class' => 'OKMsg'));
+		$this->Session->setFlash(__('The shared content has been saved', true), 'default', array('class' => 'success'));
 		if ( !empty($this->params['form']['saveList']) ) {
 			$this->redirect(array('action'=>'index'));
 		}
