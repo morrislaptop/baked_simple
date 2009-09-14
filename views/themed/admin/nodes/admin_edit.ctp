@@ -88,7 +88,7 @@
 											$form->data['Node'][$name] = $url;
 										}
 
-										echo $html->div('media', $medium->embed(str_replace('\\', '/', $url)), array('id' => $mediaId));
+										echo $html->div('media', $medium->embed(str_replace(array('\\', 'media/'), array('/', ''), $url)), array('id' => $mediaId));
 										$input['after'] = $html->link('Delete', array('plugin' => 'eav', 'controller' => 'eav_attribute_files', 'action' => 'delete', $input['model'], $this->data['Node']['id'], $id), array('id' => $deleteId));
 										echo $advform->input($name, $input);
 

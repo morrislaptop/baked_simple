@@ -17,10 +17,9 @@ class BakedView extends View {
 		return $url;
 	}
 	function media($name, $tab = 'Content', $args = array()) {
-		$media = $this->loaded['media'];
 		$value = $this->viewVars['node']['Node'][$name];
 		$url = $this->_getUrlForEavFile($value);
-		return $media->display($url);
+		return $url;
 	}
 
 	/**
