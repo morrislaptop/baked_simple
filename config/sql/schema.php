@@ -45,6 +45,7 @@ class AppSchema extends CakeSchema {
 	);
 	var $snippets = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
+		'type' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 20),
 		'title' => array('type' => 'string', 'null' => true, 'default' => NULL),
 		'content' => array('type' => 'text', 'null' => true, 'default' => NULL),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),

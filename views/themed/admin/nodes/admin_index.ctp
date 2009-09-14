@@ -1,6 +1,5 @@
 <div class="nodes index">
-<h2><?php __('Nodes');?>
-</h2>
+<h2><?php __('Nodes');?></h2>
 <?php echo $advindex->create('Node'); ?>
 <table cellpadding="0" cellspacing="0">
 <thead>
