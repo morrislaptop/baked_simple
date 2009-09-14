@@ -7,6 +7,14 @@ if ( $firstChild ) {
 if ( $lastChild ) {
 	$classes[] = 'last';
 }
+if ( isset($breadcrumb) ) {
+	// popout the latest breadcrumb, that is the current page.
+	array_pop($breadcrumb);
+	$parents = Set::extract('/Node/id', $breadcrumb);
+	if ( in_array($data['Node']['id'], $parents) ) {
+		$classes[] = 'currentParent';
+	}
+}
 if ( $this->here == $data['Node']['url'] || (isset($node['Node']['id']) && $node['Node']['id'] == $data['Node']['id']) ) {
 	$classes[] = 'current';
 }
