@@ -78,44 +78,38 @@ class Node extends AppModel {
 
 	function afterSave()
 	{
-
-		// Save this URL
-		if ( isset($this->data['Node']['type']) ) {
-			if ( !in_array($this->data['Node']['type'], array('Url', 'Menu')) ) {
-				$this->saveField('url', $this->url(), array('validate' => false, 'callbacks' => false));
-			}
-			if ( 'Menu' == $this->data['Node']['type'] ) {
-				$this->saveField('url', null, array('validate' => false, 'callbacks' => false));
-			}
-		}
-
-		// Save URL for all children.
+		// Save URL this and for all children.
+		$this->saveField('url', $this->url(), array('validate' => false, 'callbacks' => false));
 		$id = $this->id;
 		$children = $this->children($this->id);
 		foreach ($children as $child) {
 			$this->id = $child['Node']['id'];
-			$this->saveField('url', $this->url(), array('validate' => false, 'callbacks' => false));
+			$url = $this->url();
+			$this->saveField('url', $url, array('validate' => false, 'callbacks' => false));
 		}
 		$this->id = $id;
 	}
 
-	function url() {
+	function url()
+	{
 		$path = $this->getPath($this->id);
+		$current = end($path);
 
-		// skip the menu nodes.
+		// just return the URL if its the URL type
+		if ( 'Url' == $current['Node']['type'] ) {
+			$url = $current['Node']['url'];
+			return $url;
+		}
+
+		// skip the menu and url nodes.
 		$steps = array();
 		foreach ($path as $key => $step) {
-			if ( 'Menu' != $step['Node']['type'] ) {
+			if ( !in_array($step['Node']['type'], array('Menu', 'Url')) ) {
 				$steps[] = $step;
 			}
 		}
 
 		$steps = Set::extract('/Node/slug', $steps);
-		$me = array_pop($path);
-		if ( false && $me['Node']['default'] ) {
-			array_pop($steps);
-		}
-
 		$url = '/' . join('/', $steps);
 		return $url;
 	}

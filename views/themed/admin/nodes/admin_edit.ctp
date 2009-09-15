@@ -88,8 +88,14 @@
 											$form->data['Node'][$name] = $url;
 										}
 
-										echo $html->div('media', $medium->embed(str_replace(array('\\', 'media/'), array('/', ''), $url)), array('id' => $mediaId));
-										$input['after'] = $html->link('Delete', array('plugin' => 'eav', 'controller' => 'eav_attribute_files', 'action' => 'delete', $input['model'], $this->data['Node']['id'], $id), array('id' => $deleteId));
+										if ( $url ) {
+											$mediumUrl = str_replace(array('\\', '/media/'), array('/', ''), $url);
+											echo $html->div('media', $medium->embed($mediumUrl), array('id' => $mediaId));
+										}
+										if ( 0 ) {
+											// not stable yet
+											$input['after'] = $html->link('Delete', array('plugin' => 'eav', 'controller' => 'eav_attribute_files', 'action' => 'delete', $input['model'], $this->data['Node']['id'], $id), array('id' => $deleteId));
+										}
 										echo $advform->input($name, $input);
 
 										$javascript->codeBlock('

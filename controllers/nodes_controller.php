@@ -2,7 +2,7 @@
 class NodesController extends BakedSimpleAppController {
 
 	var $name = 'Nodes';
-	var $helpers = array('Forest.Menu', 'Advindex.Advindex', 'Media.Medium');
+	var $helpers = array('Forest.Menu', 'Advindex.Advindex', 'Media.Medium', 'Cache');
 	var $uses = array('BakedSimple.Node', 'BakedSimple.Snippet');
 	var $components = array('BakedSimple.BakedSimple', 'Advindex.Advindex', 'RequestHandler', 'Forest.Map');
 
@@ -271,6 +271,8 @@ class NodesController extends BakedSimpleAppController {
 	}
 
 	function display() {
+		$this->cacheAction = '1 hour';
+
 		// use internal component to get data
 		$template_layout = $this->BakedSimple->pull();
 
