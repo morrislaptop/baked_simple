@@ -55,7 +55,7 @@
 			<div id="setup">
 				<fieldset class="blockLabels">
 					 <legend><?php __('Edit Content');?></legend>
-					<?php echo $this->element('nodes' . DS . 'form'); ?>
+					<?php echo $this->element('nodes' . DS . 'admin_form'); ?>
 				</fieldset>
 			</div>
 			<?php

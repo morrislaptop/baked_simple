@@ -8,7 +8,7 @@
     <div id="setup">
       <fieldset class="blockLabels">
          <legend><?php __('Create Content');?></legend>
-         <?php echo $this->element('nodes' . DS . 'form'); ?>
+         <?php echo $this->element('nodes' . DS . 'admin_form'); ?>
       </fieldset>
     </div>
     <div class="ctrlHolder buttonHolder">
