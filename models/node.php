@@ -88,6 +88,9 @@ class Node extends AppModel {
 			$this->saveField('url', $url, array('validate' => false, 'callbacks' => false));
 		}
 		$this->id = $id;
+
+		// Clear that cache.
+		$this->clearCache();
 	}
 
 	function url()
@@ -112,6 +115,21 @@ class Node extends AppModel {
 		$steps = Set::extract('/Node/slug', $steps);
 		$url = '/' . join('/', $steps);
 		return $url;
+	}
+
+	/**
+	* Clears all cache files in the views directory that are a node.
+	*/
+	function clearCache() {
+		$folder = new Folder(TMP . 'cache' . DS . 'views');
+		$ls = $folder->ls();
+		foreach ($ls[1] as $file)
+		{
+			$file = new File($folder->pwd() . DS . $file);
+			if ( strpos($file->read(), 'baked_simple.Nodes') !== false ) {
+				$file->delete();
+			}
+		}
 	}
 
 /**
